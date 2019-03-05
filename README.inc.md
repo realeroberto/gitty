@@ -1,6 +1,6 @@
 # Gitty
 
-A client for the [GitHub REST API v3](https://developer.github.com/v3/) written in Bash.
+A client for the [GitHub REST API v3](https://developer.github.com/v3/), written in Bash.
 
 
 ## Installation
