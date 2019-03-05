@@ -1,7 +1,7 @@
 theme: jekyll-theme-cayman
 
-title: bashlets
-description: 'An experiment in extending the command-line interface'
+title: gitty
+description: 'A GitHub client in Bash'
 
 show_downloads: true
 google_analytics:
