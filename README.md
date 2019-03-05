@@ -1,15 +1,11 @@
-# bashlets::core::github
+# Gitty
 
-A client for the [GitHub REST API v3](https://developer.github.com/v3/), written in Bash and part of the [Bashlets](https://github.com/bashlets) project.
+A client for the [GitHub REST API v3](https://developer.github.com/v3/) written in Bash.
 
 
 ## Installation
 
-Install the [`bashlets`](https://github.com/bashlets/bashlets) base package. Then issue
-
-```
-bashlets install core.github
-```
+Gitty requires the [`bashlets`](https://github.com/reale/bashlets) base package.
 
 
 ## Configuration
