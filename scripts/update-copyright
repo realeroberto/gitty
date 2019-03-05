@@ -13,7 +13,7 @@
 #
 # Update copyright notice
 #
-# Copyright (c) 2014-8 Roberto Reale
+# Copyright (c) 2014-9 Roberto Reale
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +35,7 @@
 #
 ################################################################################
 
-years=2014-8
+years=2014-9
 author="Roberto Reale"
 
 for file in $(find -type f | grep -v aludel)
