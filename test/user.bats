@@ -1,16 +1,14 @@
 #!/usr/bin/env bats
 
 ################################################################################
-#                                         
-# |              |    |         |         
-# |---.,---.,---.|---.|    ,---.|--- ,---.
-# |   |,---|`---.|   ||    |---'|    `---.
-# `---'`---^`---'`   '`---'`---'`---'`---'
-#
+#  ____ ____ ____ ____ ____ 
+# ||G |||i |||t |||t |||y ||
+# ||__|||__|||__|||__|||__||
+# |/__\|/__\|/__\|/__\|/__\|
 #                                        
-# Bashlets -- A modular extensible toolbox for Bash
+# Gitty -- A GitHub client in Bash
 #
-# Copyright (c) 2014-8 Roberto Reale
+# Copyright (c) 2014-9 Roberto Reale
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
