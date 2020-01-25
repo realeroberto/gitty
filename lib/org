@@ -9,7 +9,7 @@
 #                                        
 # Gitty -- A GitHub client in Bash
 #
-# Copyright (c) 2014-9 Roberto Reale
+# Copyright (c) 2014-20 Roberto Reale
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -32,13 +32,12 @@
 ################################################################################
 
 
-source bashlets core::github::api
 
 # Block a user.
 #
 # @cf   https://developer.github.com/v3/orgs/blocking/#block-a-user
 # @public
-function bashlets::core::github::org::block()
+function gitty::org::block()
 {
     local org="${1:?Organization login needed}"
     local username="${2:?User login needed}"
@@ -52,8 +51,8 @@ function bashlets::core::github::org::block()
         #
         # @cf https://developer.github.com/v3/orgs/blocking/#blocking-organizations-users
 
-        BASHLETS_CORE_GITHUB_API_CUSTOM_HEADERS="$BASHLETS_CORE_GITHUB_API_CUSTOM_HEADERS -H 'Accept: application/vnd.github.giant-sentry-fist-preview+json'"
-        $BASHLETS_NAMESPACE api put "$url"
+        GITTY_API_CUSTOM_HEADERS="$GITTY_API_CUSTOM_HEADERS -H 'Accept: application/vnd.github.giant-sentry-fist-preview+json'"
+        gitty::api::put "$url"
     )
 }
 
@@ -61,7 +60,7 @@ function bashlets::core::github::org::block()
 #
 # @cf   https://developer.github.com/v3/orgs/blocking/#list-blocked-users
 # @public
-function bashlets::core::github::org::blocked_users()
+function gitty::org::blocked_users()
 {
     local org="${1:?Organization login needed}"
 
@@ -74,8 +73,8 @@ function bashlets::core::github::org::blocked_users()
         #
         # @cf https://developer.github.com/v3/orgs/blocking/#blocking-organizations-users
 
-        BASHLETS_CORE_GITHUB_API_CUSTOM_HEADERS="$BASHLETS_CORE_GITHUB_API_CUSTOM_HEADERS -H 'Accept: application/vnd.github.giant-sentry-fist-preview+json'"
-        $BASHLETS_NAMESPACE api get "$url" .[].login
+        GITTY_API_CUSTOM_HEADERS="$GITTY_API_CUSTOM_HEADERS -H 'Accept: application/vnd.github.giant-sentry-fist-preview+json'"
+        gitty::api::get "$url" .[].login
     )
 }
 
@@ -83,33 +82,33 @@ function bashlets::core::github::org::blocked_users()
 #
 # @cf   https://developer.github.com/v3/orgs/#get-an-organization
 # @public
-function bashlets::core::github::org::company()
+function gitty::org::company()
 {
     local org="${1:?Organization login needed}"
 
     local url="/orgs/$org"
 
-    $BASHLETS_NAMESPACE api get "$url" .company
+    gitty::api::get "$url" .company
 }
 
 # Get an organization description.
 #
 # @cf   https://developer.github.com/v3/orgs/#get-an-organization
 # @public
-function bashlets::core::github::org::describe()
+function gitty::org::describe()
 {
     local org="${1:?Organization login needed}"
 
     local url="/orgs/$org"
 
-    $BASHLETS_NAMESPACE api get "$url" .description
+    gitty::api::get "$url" .description
 }
 
 # Edit an organization.
 #
 # @cf   https://developer.github.com/v3/orgs/#edit-an-organization
 # @public
-function bashlets::core::github::org::edit()
+function gitty::org::edit()
 {
     local org="${1:?Organization login needed}"
     local key="${2:?Key needed}"
@@ -117,40 +116,40 @@ function bashlets::core::github::org::edit()
 
     local url="/orgs/$org"
 
-    $BASHLETS_NAMESPACE api patch "$url" "{\"$key\": \"$value\"}" .updated_at
+    gitty::api::patch "$url" "{\"$key\": \"$value\"}" .updated_at
 }
 
 # Get an organization email.
 #
 # @cf   https://developer.github.com/v3/orgs/#get-an-organization
 # @public
-function bashlets::core::github::org::email()
+function gitty::org::email()
 {
     local org="${1:?Organization login needed}"
 
     local url="/orgs/$org"
 
-    $BASHLETS_NAMESPACE api get "$url" .email
+    gitty::api::get "$url" .email
 }
 
 # Get an organization.
 #
 # @cf   https://developer.github.com/v3/orgs/#get-an-organization
 # @public
-function bashlets::core::github::org::get()
+function gitty::org::get()
 {
     local org="${1:?Organization login needed}"
 
     local url="/orgs/$org"
 
-    $BASHLETS_NAMESPACE api get "$url" .
+    gitty::api::get "$url" .
 }
 
 # Check whether a user is blocked from an organization.
 #
 # @cf   https://developer.github.com/v3/orgs/blocking/#check-whether-a-user-is-blocked-from-an-organization
 # @public
-function bashlets::core::github::org::is_blocked()
+function gitty::org::is_blocked()
 {
     local org="${1:?Organization login needed}"
     local username="${2:?User login needed}"
@@ -164,8 +163,8 @@ function bashlets::core::github::org::is_blocked()
         #
         # @cf https://developer.github.com/v3/orgs/blocking/#blocking-organizations-users
 
-        BASHLETS_CORE_GITHUB_API_CUSTOM_HEADERS="$BASHLETS_CORE_GITHUB_API_CUSTOM_HEADERS -H 'Accept: application/vnd.github.giant-sentry-fist-preview+json'"
-        status="$($BASHLETS_NAMESPACE api status "$url")"
+        GITTY_API_CUSTOM_HEADERS="$GITTY_API_CUSTOM_HEADERS -H 'Accept: application/vnd.github.giant-sentry-fist-preview+json'"
+        status="$(gitty::api::status "$url")"
 
         [[ $status == 204 ]]
     )
@@ -175,33 +174,33 @@ function bashlets::core::github::org::is_blocked()
 #
 # @cf   https://developer.github.com/v3/orgs/#get-an-organization
 # @public
-function bashlets::core::github::org::location()
+function gitty::org::location()
 {
     local org="${1:?Organization login needed}"
 
     local url="/orgs/$org"
 
-    $BASHLETS_NAMESPACE api get "$url" .location
+    gitty::api::get "$url" .location
 }
 
 # Get an organization name.
 #
 # @cf   https://developer.github.com/v3/orgs/#get-an-organization
 # @public
-function bashlets::core::github::org::name()
+function gitty::org::name()
 {
     local org="${1:?Organization login needed}"
 
     local url="/orgs/$org"
 
-    $BASHLETS_NAMESPACE api get "$url" .name
+    gitty::api::get "$url" .name
 }
 
 # List organization projects.
 #
 # @cf   https://developer.github.com/v3/projects/#list-organization-projects
 # @public
-function bashlets::core::github::org::projects()
+function gitty::org::projects()
 {
     local org="${1:?Organization login needed}"
     local state="${2:-all}"  # open, closed, all
@@ -215,8 +214,8 @@ function bashlets::core::github::org::projects()
         #
         # @cf https://developer.github.com/v3/projects/
 
-        BASHLETS_CORE_GITHUB_API_CUSTOM_HEADERS="$BASHLETS_CORE_GITHUB_API_CUSTOM_HEADERS -H 'Accept: application/vnd.github.inertia-preview+json'"
-        $BASHLETS_NAMESPACE api paginate "$url" id "$limit" "$callback"
+        GITTY_API_CUSTOM_HEADERS="$GITTY_API_CUSTOM_HEADERS -H 'Accept: application/vnd.github.inertia-preview+json'"
+        gitty::api::paginate "$url" id "$limit" "$callback"
     )
 }
 
@@ -224,7 +223,7 @@ function bashlets::core::github::org::projects()
 #
 # @cf   https://developer.github.com/v3/repos/#list-organization-repositories
 # @public
-function bashlets::core::github::org::repos()
+function gitty::org::repos()
 {
     local org="${1:?Organization login needed}"
     local type="${2:-all}"  # all, public, private, forks, sources, member
@@ -232,14 +231,14 @@ function bashlets::core::github::org::repos()
 
     local url="/orgs/$org/repos?type=$type"
 
-    $BASHLETS_NAMESPACE api paginate "$url" name "$limit" "$callback"
+    gitty::api::paginate "$url" name "$limit" "$callback"
 }
 
 # Unblock a user.
 #
 # @cf   https://developer.github.com/v3/orgs/blocking/#unblock-a-user
 # @public
-function bashlets::core::github::org::unblock()
+function gitty::org::unblock()
 {
     local org="${1:?Organization login needed}"
     local username="${2:?User login needed}"
@@ -253,8 +252,8 @@ function bashlets::core::github::org::unblock()
         #
         # @cf https://developer.github.com/v3/orgs/blocking/#blocking-organizations-users
 
-        BASHLETS_CORE_GITHUB_API_CUSTOM_HEADERS="$BASHLETS_CORE_GITHUB_API_CUSTOM_HEADERS -H 'Accept: application/vnd.github.giant-sentry-fist-preview+json'"
-        $BASHLETS_NAMESPACE api delete "$url"
+        GITTY_API_CUSTOM_HEADERS="$GITTY_API_CUSTOM_HEADERS -H 'Accept: application/vnd.github.giant-sentry-fist-preview+json'"
+        gitty::api::delete "$url"
     )
 }
 
@@ -262,13 +261,13 @@ function bashlets::core::github::org::unblock()
 #
 # @cf   https://developer.github.com/v3/orgs/#get-an-organization
 # @public
-function bashlets::core::github::org::url()
+function gitty::org::url()
 {
     local org="${1:?Organization login needed}"
 
     local url="/orgs/$org"
 
-    $BASHLETS_NAMESPACE api get "$url" .url
+    gitty::api::get "$url" .url
 }
 
 # Local variables:

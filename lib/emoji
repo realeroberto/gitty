@@ -9,7 +9,7 @@
 #                                        
 # Gitty -- A GitHub client in Bash
 #
-# Copyright (c) 2014-9 Roberto Reale
+# Copyright (c) 2014-20 Roberto Reale
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -32,19 +32,18 @@
 ################################################################################
 
 
-source bashlets core::github::api
 
 # Get an emoji's url.
 #
 # @cf   https://developer.github.com/v3/emojis/#emojis
 # @public
-function bashlets::core::github::emoji::url()
+function gitty::emoji::url()
 {
     local name="${1:?Emoji name required}"
     local url="/emojis"
     
     # @cf https://github.com/stedolan/jq/issues/345
-    $BASHLETS_NAMESPACE api get "$url" ".[\"$name\"]"
+    gitty::api::get "$url" ".[\"$name\"]"
 }
 
 

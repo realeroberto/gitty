@@ -9,7 +9,7 @@
 #                                        
 # Gitty -- A GitHub client in Bash
 #
-# Copyright (c) 2014-9 Roberto Reale
+# Copyright (c) 2014-20 Roberto Reale
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -32,19 +32,18 @@
 ################################################################################
 
 
-source bashlets core::github::api
 
 # Check if the authorized user follows another.
 #
 # @cf   https://developer.github.com/v3/users/followers/#check-if-you-are-following-a-user
 # @public
-function bashlets::core::github::my::am_following()
+function gitty::my::am_following()
 {
     local target_user="${1:?Target user name required}"
     local url="/user/following/$target_user"
     local status
 
-    status="$($BASHLETS_NAMESPACE api status "$url")"
+    status="$(gitty::api::status "$url")"
 
     [[ $status == 204 ]]
 }
@@ -53,7 +52,7 @@ function bashlets::core::github::my::am_following()
 #
 # @cf   https://developer.github.com/v3/users/blocking/#block-a-user
 # @public
-function bashlets::core::github::my::block()
+function gitty::my::block()
 {
     local username="${1:?User login needed}"
 
@@ -66,8 +65,8 @@ function bashlets::core::github::my::block()
         #
         # @cf https://developer.github.com/v3/users/blocking/#block-another-user
 
-        BASHLETS_CORE_GITHUB_API_CUSTOM_HEADERS="$BASHLETS_CORE_GITHUB_API_CUSTOM_HEADERS -H 'Accept: application/vnd.github.giant-sentry-fist-preview+json'"
-        $BASHLETS_NAMESPACE api put "$url"
+        GITTY_API_CUSTOM_HEADERS="$GITTY_API_CUSTOM_HEADERS -H 'Accept: application/vnd.github.giant-sentry-fist-preview+json'"
+        gitty::api::put "$url"
     )
 }
 
@@ -75,7 +74,7 @@ function bashlets::core::github::my::block()
 #
 # @cf   https://developer.github.com/v3/users/blocking/#list-blocked-users
 # @public
-function bashlets::core::github::my::blocked_users()
+function gitty::my::blocked_users()
 {
     local url="/user/blocks"
 
@@ -86,8 +85,8 @@ function bashlets::core::github::my::blocked_users()
         #
         # @cf https://developer.github.com/v3/users/blocking/#block-another-user
 
-        BASHLETS_CORE_GITHUB_API_CUSTOM_HEADERS="$BASHLETS_CORE_GITHUB_API_CUSTOM_HEADERS -H 'Accept: application/vnd.github.giant-sentry-fist-preview+json'"
-        $BASHLETS_NAMESPACE api get "$url" .[].login
+        GITTY_API_CUSTOM_HEADERS="$GITTY_API_CUSTOM_HEADERS -H 'Accept: application/vnd.github.giant-sentry-fist-preview+json'"
+        gitty::api::get "$url" .[].login
     )
 }
 
@@ -95,45 +94,45 @@ function bashlets::core::github::my::blocked_users()
 #
 # @cf   https://developer.github.com/v3/users/emails/#list-email-addresses-for-a-user
 # @public
-function bashlets::core::github::my::emails()
+function gitty::my::emails()
 {
     local limit="${1:-100}" callback="${2:-cat}"
     local url="/user/emails"
 
-    $BASHLETS_NAMESPACE api paginate "$url" email "$limit" "$callback"
+    gitty::api::paginate "$url" email "$limit" "$callback"
 }
 
 # List followers of the authenticated user.
 #
 # @cf   https://developer.github.com/v3/users/followers/#list-followers-of-a-user
 # @public
-function bashlets::core::github::my::followers()
+function gitty::my::followers()
 {
     local since="${1:-0}"
     local limit="${3:-100}" callback="${4:-cat}"
     local url="/user/followers?since=$since"
 
-    $BASHLETS_NAMESPACE api paginate "$url" login "$limit" "$callback"
+    gitty::api::paginate "$url" login "$limit" "$callback"
 }
 
 # List who the authenticated user is following.
 #
 # @cf   https://developer.github.com/v3/users/followers/#list-users-followed-by-another-user
 # @public
-function bashlets::core::github::my::following()
+function gitty::my::following()
 {
     local since="${1:-0}"
     local limit="${3:-100}" callback="${4:-cat}"
     local url="/user/following?since=$since"
 
-    $BASHLETS_NAMESPACE api paginate "$url" login "$limit" "$callback"
+    gitty::api::paginate "$url" login "$limit" "$callback"
 }
 
 # Check whether the authorized user has blocked another user.
 #
 # @cf   https://developer.github.com/v3/users/blocking/#check-whether-youve-blocked-a-user
 # @public
-function bashlets::core::github::my::have_blocked()
+function gitty::my::have_blocked()
 {
     local username="${1:?User login needed}"
     local url="/user/blocks/$username"
@@ -146,8 +145,8 @@ function bashlets::core::github::my::have_blocked()
         #
         # @cf https://developer.github.com/v3/users/blocking/#block-another-user
 
-        BASHLETS_CORE_GITHUB_API_CUSTOM_HEADERS="$BASHLETS_CORE_GITHUB_API_CUSTOM_HEADERS -H 'Accept: application/vnd.github.giant-sentry-fist-preview+json'"
-        status="$($BASHLETS_NAMESPACE api status "$url")"
+        GITTY_API_CUSTOM_HEADERS="$GITTY_API_CUSTOM_HEADERS -H 'Accept: application/vnd.github.giant-sentry-fist-preview+json'"
+        status="$(gitty::api::status "$url")"
 
         [[ $status == 204 ]]
     )
@@ -157,56 +156,56 @@ function bashlets::core::github::my::have_blocked()
 #
 # @cf   https://developer.github.com/v3/orgs/#list-your-organizations
 # @public
-function bashlets::core::github::my::orgs()
+function gitty::my::orgs()
 {
     local limit="${1:-100}" callback="${2:-cat}"
     local url="/user/orgs"
 
-    $BASHLETS_NAMESPACE api paginate "$url" login "$limit" "$callback"
+    gitty::api::paginate "$url" login "$limit" "$callback"
 }
 
 # List public email addresses for the authenticated user.
 #
 # @cf   https://developer.github.com/v3/users/emails/#list-public-email-addresses-for-a-user
 # @public
-function bashlets::core::github::my::public_emails()
+function gitty::my::public_emails()
 {
     local limit="${1:-100}" callback="${2:-cat}"
     local url="/user/public_emails"
 
-    $BASHLETS_NAMESPACE api paginate "$url" email "$limit" "$callback"
+    gitty::api::paginate "$url" email "$limit" "$callback"
 }
 
 # List all the repositories for the authenticated user.
 #
 # @cf   https://developer.github.com/v3/repos/#list-your-repositories
 # @public
-function bashlets::core::github::my::repos()
+function gitty::my::repos()
 {
     local limit="${1:-100}" callback="${2:-cat}"
     local url="/user/repos"
 
-    $BASHLETS_NAMESPACE api paginate "$url" name "$limit" "$callback"
+    gitty::api::paginate "$url" name "$limit" "$callback"
 }
 
 # List all the starred gists for the authenticated user.
 #
 # @cf   https://developer.github.com/v3/gists/#list-starred-gists
 # @public
-function bashlets::core::github::my::starred_gists()
+function gitty::my::starred_gists()
 {
-    local since="${1:-$BASHLETS_CORE_GITHUB_API_EPOCH}"
+    local since="${1:-$GITTY_API_EPOCH}"
     local limit="${2:-100}" callback="${3:-cat}"
     local url="/gists/starred"
 
-    $BASHLETS_NAMESPACE api paginate "$url" id "$limit" "$callback"
+    gitty::api::paginate "$url" id "$limit" "$callback"
 }
 
 # List repositories being starred by the specified user.
 #
 # @cf   https://developer.github.com/v3/activity/starring/#list-repositories-being-starred
 # @public
-function bashlets::core::github::my::starred_repos()
+function gitty::my::starred_repos()
 {
     local sort="${1:-created}"    # created, updated
     local direction="${2:-desc}"  # asc, desc
@@ -214,7 +213,7 @@ function bashlets::core::github::my::starred_repos()
 
     local url="/user/starred?sort=$sort&direction=$direction"
 
-    $BASHLETS_NAMESPACE api paginate "$url" name "$limit" "$callback"
+    gitty::api::paginate "$url" name "$limit" "$callback"
 }
 
 # Get the private timeline for the authenticated user, in Atom format.
@@ -223,14 +222,14 @@ function bashlets::core::github::my::starred_repos()
 #
 # @cf   https://developer.github.com/v3/activity/feeds/#list-feeds
 # @private
-function bashlets::core::github::my::private_timeline()
+function gitty::my::private_timeline()
 {
     local type="${1:-default}"  # default, actor
 
     # `orgs` is not allowed
     [[ $type == default || $type == actor ]] || return
 
-    curl -s "$(bashlets::core::github::my::private_timeline_url "$type")"
+    curl -s "$(gitty::my::private_timeline_url "$type")"
 }
 
 # Get the private timeline URI for the authenticated user.
@@ -239,7 +238,7 @@ function bashlets::core::github::my::private_timeline()
 #
 # @cf   https://developer.github.com/v3/activity/feeds/#list-feeds
 # @private
-function bashlets::core::github::my::private_timeline_url()
+function gitty::my::private_timeline_url()
 {
     local type="${1:-default}"  # default, actor, orgs
     local url="/feeds"
@@ -256,34 +255,34 @@ function bashlets::core::github::my::private_timeline_url()
             return
     esac
 
-    $BASHLETS_NAMESPACE api get "$url" ".$key"
+    gitty::api::get "$url" ".$key"
 }
 
 # Get the public timeline for the authenticated user, in Atom format.
 #
 # @cf   https://developer.github.com/v3/activity/feeds/#list-feeds
 # @public
-function bashlets::core::github::my::public_timeline()
+function gitty::my::public_timeline()
 {
-    curl -s "$(bashlets::core::github::my::public_timeline_url)"
+    curl -s "$(gitty::my::public_timeline_url)"
 }
 
 # Get the public timeline URI for the authenticated user.
 #
 # @cf   https://developer.github.com/v3/activity/feeds/#list-feeds
 # @public
-function bashlets::core::github::my::public_timeline_url()
+function gitty::my::public_timeline_url()
 {
     local url="/feeds"
 
-    $BASHLETS_NAMESPACE api get "$url" .current_user_public_url
+    gitty::api::get "$url" .current_user_public_url
 }
 
 # Unblock a user.
 #
 # @cf   https://developer.github.com/v3/users/blocking/#unblock-a-user
 # @public
-function bashlets::core::github::my::unblock()
+function gitty::my::unblock()
 {
     local username="${1:?User login needed}"
 
@@ -296,8 +295,8 @@ function bashlets::core::github::my::unblock()
         #
         # @cf https://developer.github.com/v3/users/blocking/#block-another-user
 
-        BASHLETS_CORE_GITHUB_API_CUSTOM_HEADERS="$BASHLETS_CORE_GITHUB_API_CUSTOM_HEADERS -H 'Accept: application/vnd.github.giant-sentry-fist-preview+json'"
-        $BASHLETS_NAMESPACE api delete "$url"
+        GITTY_API_CUSTOM_HEADERS="$GITTY_API_CUSTOM_HEADERS -H 'Accept: application/vnd.github.giant-sentry-fist-preview+json'"
+        gitty::api::delete "$url"
     )
 }
 

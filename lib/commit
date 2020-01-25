@@ -9,7 +9,7 @@
 #                                        
 # Gitty -- A GitHub client in Bash
 #
-# Copyright (c) 2014-9 Roberto Reale
+# Copyright (c) 2014-20 Roberto Reale
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -32,13 +32,12 @@
 ################################################################################
 
 
-source bashlets core::github::api
 
 # List comments for a commit.
 #
 # @cf   https://developer.github.com/v3/repos/comments/#list-comments-for-a-single-commit
 # @public
-function bashlets::core::github::commit::comments()
+function gitty::commit::comments()
 {
     local owner="${1:?User name needed}"
     local repo="${2:?Repository name needed}"
@@ -46,7 +45,7 @@ function bashlets::core::github::commit::comments()
     local limit="${4:-100}" callback="${5:-cat}"
     local url="/repos/$owner/$repo/commits/$ref/comments"
 
-    $BASHLETS_NAMESPACE api paginate "$url" id "$limit" "$callback"
+    gitty::api::paginate "$url" id "$limit" "$callback"
 }
 
 # Local variables:

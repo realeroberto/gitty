@@ -9,7 +9,7 @@
 #                                        
 # Gitty -- A GitHub client in Bash
 #
-# Copyright (c) 2014-9 Roberto Reale
+# Copyright (c) 2014-20 Roberto Reale
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +35,7 @@
 # Build a JSON array from argv.
 #
 # @public
-function bashlets::core::github::json::build_array()
+function gitty::json::build_array()
 {
     local json='[]'
     while [[ $# -gt 0 ]]

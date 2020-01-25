@@ -9,7 +9,7 @@
 #                                        
 # Gitty -- A GitHub client in Bash
 #
-# Copyright (c) 2014-9 Roberto Reale
+# Copyright (c) 2014-20 Roberto Reale
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -32,42 +32,41 @@
 ################################################################################
 
 
-source bashlets core::github::api
 
 # Get the name of an individual license.
 #
 # @cf   https://developer.github.com/v3/licenses/#get-an-individual-license
 # @public
-function bashlets::core::github::license::name()
+function gitty::license::name()
 {
     local key="${1:-mit}"
     local url="/licenses/$key"
     
-    $BASHLETS_NAMESPACE api get "$url" .name
+    gitty::api::get "$url" .name
 }
 
 # Describe an individual license.
 #
 # @cf   https://developer.github.com/v3/licenses/#get-an-individual-license
 # @public
-function bashlets::core::github::license::describe()
+function gitty::license::describe()
 {
     local key="${1:-mit}"
     local url="/licenses/$key"
     
-    $BASHLETS_NAMESPACE api get "$url" .description
+    gitty::api::get "$url" .description
 }
 
 # Get the text of an individual license.
 #
 # @cf   https://developer.github.com/v3/licenses/#get-an-individual-license
 # @public
-function bashlets::core::github::license::text()
+function gitty::license::text()
 {
     local key="${1:-mit}"
     local url="/licenses/$key"
     
-    $BASHLETS_NAMESPACE api get "$url" .body
+    gitty::api::get "$url" .body
 }
 
 # Local variables:

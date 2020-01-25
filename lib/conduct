@@ -9,7 +9,7 @@
 #                                        
 # Gitty -- A GitHub client in Bash
 #
-# Copyright (c) 2014-9 Roberto Reale
+# Copyright (c) 2014-20 Roberto Reale
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -32,12 +32,11 @@
 ################################################################################
 
 
-source bashlets core::github::api
 
 # Get properties of an individual code of conduct.
 #
 # @cf   https://developer.github.com/v3/codes_of_conduct/#get-an-individual-code-of-conduct
-function __bashlets::core::github::conduct::value()
+function __gitty::conduct::value()
 {
     local key="${1:-contributor_covenant}" field="${2:-key}"
     local url="/codes_of_conduct/$key"
@@ -49,8 +48,8 @@ function __bashlets::core::github::conduct::value()
         #
         # @cf https://developer.github.com/v3/codes_of_conduct/#codes-of-conduct
 
-        BASHLETS_CORE_GITHUB_API_CUSTOM_HEADERS="$BASHLETS_CORE_GITHUB_API_CUSTOM_HEADERS -H 'Accept: application/vnd.github.scarlet-witch-preview+json'"
-        $BASHLETS_NAMESPACE api get "$url" ".\"$field\""
+        GITTY_API_CUSTOM_HEADERS="$GITTY_API_CUSTOM_HEADERS -H 'Accept: application/vnd.github.scarlet-witch-preview+json'"
+        gitty::api::get "$url" ".\"$field\""
     )
 }
 
@@ -58,30 +57,30 @@ function __bashlets::core::github::conduct::value()
 #
 # @cf   https://developer.github.com/v3/codes_of_conduct/#get-an-individual-code-of-conduct
 # @public
-function bashlets::core::github::conduct::name()
+function gitty::conduct::name()
 {
     local key="${1:-contributor_covenant}"
-    __bashlets::core::github::conduct::value "$key" name
+    __gitty::conduct::value "$key" name
 }
 
 # Get the url of an individual code of conduct.
 #
 # @cf   https://developer.github.com/v3/codes_of_conduct/#get-an-individual-code-of-conduct
 # @public
-function bashlets::core::github::conduct::url()
+function gitty::conduct::url()
 {
     local key="${1:-contributor_covenant}"
-    __bashlets::core::github::conduct::value "$key" url
+    __gitty::conduct::value "$key" url
 }
 
 # Get the text of an individual code of conduct.
 #
 # @cf   https://developer.github.com/v3/codes_of_conduct/#get-an-individual-code-of-conduct
 # @public
-function bashlets::core::github::conduct::text()
+function gitty::conduct::text()
 {
     local key="${1:-contributor_covenant}"
-    __bashlets::core::github::conduct::value "$key" body
+    __gitty::conduct::value "$key" body
 }
 
 

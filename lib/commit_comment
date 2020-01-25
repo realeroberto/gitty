@@ -9,7 +9,7 @@
 #                                        
 # Gitty -- A GitHub client in Bash
 #
-# Copyright (c) 2014-9 Roberto Reale
+# Copyright (c) 2014-20 Roberto Reale
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -32,13 +32,12 @@
 ################################################################################
 
 
-source bashlets core::github::api
 
 # Create a commit comment.
 #
 # @cf   https://developer.github.com/v3/repos/comments/#create-a-commit-comment
 # @public
-function bashlets::core::github::commit_comment::create()
+function gitty::commit_comment::create()
 {
     local owner="${1:?User name required}"
     local repo="${2:?Repository name required}"
@@ -61,28 +60,28 @@ function bashlets::core::github::commit_comment::create()
         data="$(echo "$data" | jq -r --arg position "$position" '. + {position: $position}')"
     fi
 
-    $BASHLETS_NAMESPACE api post "$url" "$data" .id
+    gitty::api::post "$url" "$data" .id
 }
 
 # Delete a commit comment.
 #
 # @cf   https://developer.github.com/v3/repos/comments/#delete-a-commit-comment
 # @public
-function bashlets::core::github::commit_comment::delete()
+function gitty::commit_comment::delete()
 {
     local owner="${1:?User name required}"
     local repo="${2:?Repository name required}"
     local id="${3:?Comment id required}"
     local url="/repos/$owner/$repo/comments/$id"
 
-    $BASHLETS_NAMESPACE api delete "$url"
+    gitty::api::delete "$url"
 }
 
 # Update a commit comment.
 #
 # @cf   https://developer.github.com/v3/repos/comments/#update-a-commit-comment
 # @public
-function bashlets::core::github::commit_comment::edit()
+function gitty::commit_comment::edit()
 {
     local owner="${1:?User name required}"
     local repo="${2:?Repository name required}"
@@ -90,77 +89,77 @@ function bashlets::core::github::commit_comment::edit()
     local text="${4:?Comment text required}"
     local url="/repos/$owner/$repo/comments/$id"
 
-    $BASHLETS_NAMESPACE api patch "$url" "{\"body\": \"$text\"}" .updated_at
+    gitty::api::patch "$url" "{\"body\": \"$text\"}" .updated_at
 }
 
 # Get a single commit comment.
 #
 # @cf   https://developer.github.com/v3/repos/comments/#get-a-single-commit-comment
 # @public
-function bashlets::core::github::commit_comment::get()
+function gitty::commit_comment::get()
 {
     local owner="${1:?User name required}"
     local repo="${2:?Repository name required}"
     local id="${3:?Comment id required}"
     local url="/repos/$owner/$repo/comments/$id"
 
-    $BASHLETS_NAMESPACE api get "$url" .
+    gitty::api::get "$url" .
 }
 
 # Get the path of a single commit comment.
 #
 # @cf   https://developer.github.com/v3/repos/comments/#get-a-single-commit-comment
 # @public
-function bashlets::core::github::commit_comment::path()
+function gitty::commit_comment::path()
 {
     local owner="${1:?User name required}"
     local repo="${2:?Repository name required}"
     local id="${3:?Comment id required}"
     local url="/repos/$owner/$repo/comments/$id"
 
-    $BASHLETS_NAMESPACE api get "$url" .path
+    gitty::api::get "$url" .path
 }
 
 # Get the position of a single commit comment.
 #
 # @cf   https://developer.github.com/v3/repos/comments/#get-a-single-commit-comment
 # @public
-function bashlets::core::github::commit_comment::position()
+function gitty::commit_comment::position()
 {
     local owner="${1:?User name required}"
     local repo="${2:?Repository name required}"
     local id="${3:?Comment id required}"
     local url="/repos/$owner/$repo/comments/$id"
 
-    $BASHLETS_NAMESPACE api get "$url" .position
+    gitty::api::get "$url" .position
 }
 
 # Get the commit ID of a single commit comment.
 #
 # @cf   https://developer.github.com/v3/repos/comments/#get-a-single-commit-comment
 # @public
-function bashlets::core::github::commit_comment::ref()
+function gitty::commit_comment::ref()
 {
     local owner="${1:?User name required}"
     local repo="${2:?Repository name required}"
     local id="${3:?Comment id required}"
     local url="/repos/$owner/$repo/comments/$id"
 
-    $BASHLETS_NAMESPACE api get "$url" .commit_id
+    gitty::api::get "$url" .commit_id
 }
 
 # Get the text of a single commit comment.
 #
 # @cf   https://developer.github.com/v3/repos/comments/#get-a-single-commit-comment
 # @public
-function bashlets::core::github::commit_comment::text()
+function gitty::commit_comment::text()
 {
     local owner="${1:?User name required}"
     local repo="${2:?Repository name required}"
     local id="${3:?Comment id required}"
     local url="/repos/$owner/$repo/comments/$id"
 
-    $BASHLETS_NAMESPACE api get "$url" .body
+    gitty::api::get "$url" .body
 }
 
 # Local variables:

@@ -8,7 +8,7 @@
 #                                        
 # Gitty -- A GitHub client in Bash
 #
-# Copyright (c) 2014-9 Roberto Reale
+# Copyright (c) 2014-20 Roberto Reale
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -33,10 +33,10 @@
 load 'lib/bats-support/load'
 load 'lib/bats-assert/load'
 
-source bashlets core::github::emoji
+source gitty.sh
 
-@test "core::github::emoji::url: get an emoji's URL" {
-    result="$($BASHLETS_NAMESPACE emoji url octocat)"
+@test "gitty::emoji::url: get an emoji's URL" {
+    result="$(gitty::emoji::url octocat)"
     [[ -n $result ]]
 }
 

@@ -5,7 +5,18 @@ A client for the [GitHub REST API v3](https://developer.github.com/v3/), written
 
 ## Installation
 
-Gitty requires the [`bashlets`](https://github.com/reale/bashlets) base package.
+A reasonably sane GNU environment is assumed to be at hand. More specifically, you need:
+
+* Bash (of course)
+* GNU Coreutils
+* GNU grep, sed, awk
+* curl
+* the [jq](https://stedolan.github.io/jq/) command-line JSON processor
+* Make
+
+To run the test suite, you will need Sam Stephenson's [Bash Automated Testing System](https://github.com/sstephenson/bats).
+
+To check for proper programming will, you need [ShellCheck](https://www.shellcheck.net/).
 
 
 ## Configuration
@@ -14,13 +25,13 @@ Gitty requires the [`bashlets`](https://github.com/reale/bashlets) base package.
 
 The library supports both basic and OAuth authentication.
 
-Basic authentication is supported through the environment variable `BASHLETS_CORE_GITHUB_API_BASIC_AUTH`, which must contain the username.
+Basic authentication is supported through the environment variable `GITTY_API_BASIC_AUTH`, which must contain the username.
 
-[OAuth authentication](https://developer.github.com/apps/building-oauth-apps/), on the other hand, is supported through the environment variable `BASHLETS_CORE_GITHUB_API_OAUTH_TOKEN`.
+[OAuth authentication](https://developer.github.com/apps/building-oauth-apps/), on the other hand, is supported through the environment variable `GITTY_API_OAUTH_TOKEN`.
 
 ### User agent
 
-All API requests [MUST](https://developer.github.com/v3/#user-agent-required) include a valid `User-Agent` header. The library supports a custom header through the environment variables `BASHLETS_USER_AGENT` and `BASHLETS_CORE_GITHUB_API_USER_AGENT`.
+All API requests [MUST](https://developer.github.com/v3/#user-agent-required) include a valid `User-Agent` header. The library supports a custom header through the environment variable `GITTY_USER_AGENT`.
 
 
 ## Similar Projects

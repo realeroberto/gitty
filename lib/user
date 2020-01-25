@@ -9,7 +9,7 @@
 #                                        
 # Gitty -- A GitHub client in Bash
 #
-# Copyright (c) 2014-9 Roberto Reale
+# Copyright (c) 2014-20 Roberto Reale
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -32,75 +32,73 @@
 ################################################################################
 
 
-source bashlets core::github::api
-source bashlets core::github::defs
 
 # Follow a user.
 #
 # @cf   https://developer.github.com/v3/users/followers/#follow-a-user
 # @public
-function bashlets::core::github::user::follow()
+function gitty::user::follow()
 {
     local username="${1:?User login needed}"
     local url="/user/following/$username"
 
-    $BASHLETS_NAMESPACE api put "$url"
+    gitty::api::put "$url"
 }
 
 # List followers of the specified user.
 #
 # @cf   https://developer.github.com/v3/users/followers/#list-followers-of-a-user
 # @public
-function bashlets::core::github::user::followers()
+function gitty::user::followers()
 {
     local user="${1:?User name required}"
     local since="${2:-0}"
     local limit="${3:-100}" callback="${4:-cat}"
     local url="/users/$user/followers?since=$since"
 
-    $BASHLETS_NAMESPACE api paginate "$url" login "$limit" "$callback"
+    gitty::api::paginate "$url" login "$limit" "$callback"
 }
 
 # List who the specified user is following.
 #
 # @cf   https://developer.github.com/v3/users/followers/#list-users-followed-by-another-user
 # @public
-function bashlets::core::github::user::following()
+function gitty::user::following()
 {
     local user="${1:?User name required}"
     local since="${2:-0}"
     local limit="${3:-100}" callback="${4:-cat}"
     local url="/users/$user/following?since=$since"
 
-    $BASHLETS_NAMESPACE api paginate "$url" login "$limit" "$callback"
+    gitty::api::paginate "$url" login "$limit" "$callback"
 }
 
 # List public gists for the specified user.
 #
 # @cf   https://developer.github.com/v3/gists/#list-a-users-gists
 # @public
-function bashlets::core::github::user::gists()
+function gitty::user::gists()
 {
     local user="${1:?User name required}"
-    local since="${2:-$BASHLETS_CORE_GITHUB_API_EPOCH}"
+    local since="${2:-$GITTY_API_EPOCH}"
     local limit="${3:-100}" callback="${4:-cat}"
     local url="/users/$user/gists?since=$since"
 
-    $BASHLETS_NAMESPACE api paginate "$url" id "$limit" "$callback"
+    gitty::api::paginate "$url" id "$limit" "$callback"
 }
 
 # Check if the specified user follows another.
 #
 # @cf   https://developer.github.com/v3/users/followers/#check-if-one-user-follows-another
 # @public
-function bashlets::core::github::user::is_following()
+function gitty::user::is_following()
 {
     local user="${1:?User name required}"
     local target_user="${2:?Target user name required}"
     local url="/users/$user/following/$target_user"
     local status
 
-    status="$($BASHLETS_NAMESPACE api status "$url")"
+    status="$(gitty::api::status "$url")"
 
     [[ $status == 204 ]]
 }
@@ -109,32 +107,32 @@ function bashlets::core::github::user::is_following()
 #
 # @cf   https://developer.github.com/v3/users/keys/#list-public-keys-for-a-user
 # @public
-function bashlets::core::github::user::keys()
+function gitty::user::keys()
 {
     local user="${1:?User name required}"
     local limit="${2:-100}" callback="${3:-cat}"
     local url="/users/$user/keys"
 
-    $BASHLETS_NAMESPACE api paginate "$url" key "$limit" "$callback"
+    gitty::api::paginate "$url" key "$limit" "$callback"
 }
 
 # List public organization memberships for the specified user.
 #
 # @cf   https://developer.github.com/v3/orgs/#list-user-organizations
-function bashlets::core::github::user::orgs()
+function gitty::user::orgs()
 {
     local user="${1:?User name required}"
     local limit="${2:-100}" callback="${3:-cat}"
     local url="/users/$user/orgs"
 
-    $BASHLETS_NAMESPACE api paginate "$url" login "$limit" "$callback"
+    gitty::api::paginate "$url" login "$limit" "$callback"
 }
 
 # List public repositories for the specified user.
 #
 # @cf   https://developer.github.com/v3/repos/#list-user-repositories
 # @public
-function bashlets::core::github::user::repos()
+function gitty::user::repos()
 {
     local user="${1:?User name required}"
     local type="${2:-owner}"      # all, owner, member
@@ -149,14 +147,14 @@ function bashlets::core::github::user::repos()
 
     local url="/users/$user/repos?type=$type&sort=$sort&direction=$direction"
 
-    $BASHLETS_NAMESPACE api paginate "$url" name "$limit" "$callback"
+    gitty::api::paginate "$url" name "$limit" "$callback"
 }
 
 # List repositories being starred by the specified user.
 #
 # @cf   https://developer.github.com/v3/activity/starring/#list-repositories-being-starred
 # @public
-function bashlets::core::github::user::starred_repos()
+function gitty::user::starred_repos()
 {
     local user="${1:?User name required}"
     local sort="${2:-created}"    # created, updated
@@ -165,31 +163,31 @@ function bashlets::core::github::user::starred_repos()
 
     local url="/users/$user/starred?sort=$sort&direction=$direction"
 
-    $BASHLETS_NAMESPACE api paginate "$url" name "$limit" "$callback"
+    gitty::api::paginate "$url" name "$limit" "$callback"
 }
 
 # Get the public timeline for the specified user, in Atom format.
 #
 # @cf   https://developer.github.com/v3/activity/feeds/#list-feeds
 # @public
-function bashlets::core::github::user::timeline()
+function gitty::user::timeline()
 {
     local user="${1:?User name required}"
 
-    curl -s "$(bashlets::core::github::user::timeline_url "$user")"
+    curl -s "$(gitty::user::timeline_url "$user")"
 }
 
 # Get the public timeline URI for the specified user.
 #
 # @cf   https://developer.github.com/v3/activity/feeds/#list-feeds
 # @public
-function bashlets::core::github::user::timeline_url()
+function gitty::user::timeline_url()
 {
     local user="${1:?User name required}"
     local url="/feeds"
     local timeline_url
 
-    timeline_url="$($BASHLETS_NAMESPACE api get "$url" .user_url)"
+    timeline_url="$(gitty::api::get "$url" .user_url)"
 
     # TODO implement generic URI template parsing
     timeline_url="${timeline_url//\{user\}/$user}"
@@ -201,12 +199,12 @@ function bashlets::core::github::user::timeline_url()
 #
 # @cf   https://developer.github.com/v3/users/followers/#unfollow-a-user
 # @public
-function bashlets::core::github::user::unfollow()
+function gitty::user::unfollow()
 {
     local username="${1:?User login needed}"
     local url="/user/following/$username"
 
-    $BASHLETS_NAMESPACE api delete "$url"
+    gitty::api::delete "$url"
 }
 
 

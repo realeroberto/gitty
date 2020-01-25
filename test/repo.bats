@@ -8,7 +8,7 @@
 #                                        
 # Gitty -- A GitHub client in Bash
 #
-# Copyright (c) 2014-9 Roberto Reale
+# Copyright (c) 2014-20 Roberto Reale
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -33,23 +33,23 @@
 load 'lib/bats-support/load'
 load 'lib/bats-assert/load'
 
-source bashlets core::github::repo
+source gitty.sh
 
-[[ -n $BASHLETS_CORE_GITHUB_API_USERNAME ]] || fail "BASHLETS_CORE_GITHUB_API_USERNAME undefined"
+[[ -n $GITTY_API_USERNAME ]] || fail "GITTY_API_USERNAME undefined"
 
 # @cf https://gist.github.com/earthgecko/3089509
 REPO_NAME="$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)"
 
-@test "core::github::repo::create: create a repository" {
-    $BASHLETS_NAMESPACE repo create "$REPO_NAME"
+@test "gitty::repo::create: create a repository" {
+    gitty::repo::create "$REPO_NAME"
     assert_success
 }
 
-@test "core::github::repo::delete: delete a repository" {
-    $BASHLETS_NAMESPACE repo create "$REPO_NAME" > /dev/null
+@test "gitty::repo::delete: delete a repository" {
+    gitty::repo::create "$REPO_NAME" > /dev/null
 
-    $BASHLETS_NAMESPACE repo delete           \
-        "$BASHLETS_CORE_GITHUB_API_USERNAME"  \
+    gitty::repo::delete        \
+        "$GITTY_API_USERNAME"  \
         "$REPO_NAME"
 
     assert_success

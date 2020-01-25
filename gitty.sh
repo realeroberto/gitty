@@ -31,44 +31,27 @@
 #
 ################################################################################
 
-
-
-# Get the current rate limit status.
-#
-# @cf   https://developer.github.com/v3/rate_limit/#get-your-current-rate-limit-status
-# @public
-function gitty::rate_limit::limit()
-{
-    local resource="${1:-core}"  # core/search
-    local url="/rate_limit"
-
-    gitty::api::get "$url" .resources."$resource".limit
-}
-
-# Get the current rate limit status.
-#
-# @cf   https://developer.github.com/v3/rate_limit/#get-your-current-rate-limit-status
-# @public
-function gitty::rate_limit::remaining()
-{
-    local resource="${1:-core}"  # core/search
-    local url="/rate_limit"
-
-    gitty::api::get "$url" .resources."$resource".remaining
-}
-
-# Get the current rate limit status.
-#
-# @cf   https://developer.github.com/v3/rate_limit/#get-your-current-rate-limit-status
-# @public
-function gitty::rate_limit::reset()
-{
-    local resource="${1:-core}"  # core/search
-    local url="/rate_limit"
-
-    gitty::api::get "$url" .resources."$resource".reset
-}
-
+source lib/api
+source lib/commit
+source lib/commit_comment
+source lib/conduct
+source lib/defs
+source lib/emails
+source lib/emoji
+source lib/gist
+source lib/gist_comment
+source lib/github
+source lib/gitignore
+source lib/json
+source lib/license
+source lib/markdown
+source lib/my
+source lib/org
+source lib/path
+source lib/project
+source lib/rate_limit
+source lib/repo
+source lib/user
 
 # Local variables:
 # mode: shell-script

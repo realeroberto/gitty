@@ -9,7 +9,7 @@
 #                                        
 # Gitty -- A GitHub client in Bash
 #
-# Copyright (c) 2014-9 Roberto Reale
+# Copyright (c) 2014-20 Roberto Reale
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -32,18 +32,17 @@
 ################################################################################
 
 
-source bashlets core::github::api
 
 # List contents of a directory or the name of file (similar to the ls command).
 #
 # @cf   https://developer.github.com/v3/repos/contents/#get-contents
 # @public
-function bashlets::core::github::path::ls()
+function gitty::path::ls()
 {
-    local path="${1:-.}" user="${2:-bashlets}" repo="${3:-bashlets}" 
+    local path="${1:-.}" user="${2:-reale}" repo="${3:-gitty}" 
     local url="/repos/$user/$repo/contents/$path"
 
-    $BASHLETS_NAMESPACE api get "$url" \
+    gitty::api::get "$url" \
         'if type=="array" then .[].name else .name end'
 }
 
@@ -51,12 +50,12 @@ function bashlets::core::github::path::ls()
 #
 # @cf   https://developer.github.com/v3/repos/contents/#get-contents
 # @public
-function bashlets::core::github::path::type()
+function gitty::path::type()
 {
-    local path="${1:-.}" user="${2:-bashlets}" repo="${3:-bashlets}" 
+    local path="${1:-.}" user="${2:-reale}" repo="${3:-gitty}" 
     local url="/repos/$user/$repo/contents/$path"
 
-    $BASHLETS_NAMESPACE api get "$url" \
+    gitty::api::get "$url" \
         'if type=="array" then "directory" else .type end'
 }
 
@@ -64,14 +63,14 @@ function bashlets::core::github::path::type()
 #
 # @cf   https://developer.github.com/v3/repos/contents/#get-contents
 # @public
-function bashlets::core::github::path::content()
+function gitty::path::content()
 {
-    local path="${1:-.}" user="${2:-bashlets}" repo="${3:-bashlets}" 
+    local path="${1:-.}" user="${2:-reale}" repo="${3:-gitty}" 
     local url="/repos/$user/$repo/contents/$path"
     local download_url
 
     download_url="$(
-        $BASHLETS_NAMESPACE api get "$url" \
+        gitty::api::get "$url" \
             'if type!="array" and .type=="file" then .download_url else "" end'
     )"
 

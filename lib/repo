@@ -9,7 +9,7 @@
 #                                        
 # Gitty -- A GitHub client in Bash
 #
-# Copyright (c) 2014-9 Roberto Reale
+# Copyright (c) 2014-20 Roberto Reale
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -32,41 +32,40 @@
 ################################################################################
 
 
-source bashlets core::github::api
 
 # List commits on a repository.
 #
 # @cf   https://developer.github.com/v3/repos/commits/#list-commits-on-a-repository
 # @public
-function bashlets::core::github::repo::commits()
+function gitty::repo::commits()
 {
     local user="${1:?User name needed}"
     local repo="${2:?Repository name needed}"
     local limit="${3:-100}" callback="${4:-cat}"
     local url="/repos/$user/$repo/commits"
 
-    $BASHLETS_NAMESPACE api paginate "$url" sha "$limit" "$callback"
+    gitty::api::paginate "$url" sha "$limit" "$callback"
 }
 
 # List commit comments for a repository.
 #
 # @cf   https://developer.github.com/v3/repos/comments/#list-commit-comments-for-a-repository
 # @public
-function bashlets::core::github::repo::comments()
+function gitty::repo::comments()
 {
     local user="${1:?User name needed}"
     local repo="${2:?Repository name needed}"
     local limit="${3:-100}" callback="${4:-cat}"
     local url="/repos/$user/$repo/comments"
 
-    $BASHLETS_NAMESPACE api paginate "$url" id "$limit" "$callback"
+    gitty::api::paginate "$url" id "$limit" "$callback"
 }
 
 # Get a repository's code of conduct.
 #
 # @cf   https://developer.github.com/v3/codes_of_conduct/#get-the-contents-of-a-repositorys-code-of-conduct
 # @public
-function bashlets::core::github::repo::conduct()
+function gitty::repo::conduct()
 {
     local user="${1:?User name needed}"
     local repo="${2:?Repository name needed}"
@@ -79,8 +78,8 @@ function bashlets::core::github::repo::conduct()
         #
         # @cf https://developer.github.com/v3/codes_of_conduct/#codes-of-conduct
 
-        BASHLETS_CORE_GITHUB_API_CUSTOM_HEADERS="$BASHLETS_CORE_GITHUB_API_CUSTOM_HEADERS -H 'Accept: application/vnd.github.scarlet-witch-preview+json'"
-        $BASHLETS_NAMESPACE api get "$url" .key
+        GITTY_API_CUSTOM_HEADERS="$GITTY_API_CUSTOM_HEADERS -H 'Accept: application/vnd.github.scarlet-witch-preview+json'"
+        gitty::api::get "$url" .key
     )
 }
 
@@ -88,14 +87,14 @@ function bashlets::core::github::repo::conduct()
 #
 # @cf   https://developer.github.com/v3/repos/#create
 # @public
-function bashlets::core::github::repo::create()
+function gitty::repo::create()
 {
     local repo="${1:?Repository name needed}"
     local url="/user/repos"
     local json
 
     json="{ \"name\": \"$repo\" }"
-    $BASHLETS_NAMESPACE api post "$url" "$json" .name
+    gitty::api::post "$url" "$json" .name
 }
 
 # Delete a repository.
@@ -104,13 +103,13 @@ function bashlets::core::github::repo::create()
 #
 # @cf   https://developer.github.com/v3/repos/#delete-a-repository
 # @public
-function bashlets::core::github::repo::delete()
+function gitty::repo::delete()
 {
     local user="${1:?User name needed}"
     local repo="${2:?Repository name needed}"
     local url="/repos/$user/$repo"
 
-    $BASHLETS_NAMESPACE api delete "$url"
+    gitty::api::delete "$url"
 }
 
 # Fork a repository.
@@ -119,7 +118,7 @@ function bashlets::core::github::repo::delete()
 #
 # @cf   https://developer.github.com/v3/repos/forks/#create-a-fork
 # @public
-function bashlets::core::github::repo::fork()
+function gitty::repo::fork()
 {
     local user="${1:?User name needed}"
     local repo="${2:?Repository name needed}"
@@ -130,14 +129,14 @@ function bashlets::core::github::repo::fork()
 
     [[ -n $org ]] && url="$url&organization=$org"
     
-    $BASHLETS_NAMESPACE api post202 "$url" "" .id
+    gitty::api::post202 "$url" "" .id
 }
 
 # List forks for a repository.
 #
 # @cf   https://developer.github.com/v3/repos/forks/#list-forks
 # @public
-function bashlets::core::github::repo::forks()
+function gitty::repo::forks()
 {
     local user="${1:?User name needed}"
     local repo="${2:?Repository name needed}"
@@ -145,21 +144,21 @@ function bashlets::core::github::repo::forks()
     local limit="${4:-100}" callback="${5:-cat}"
     local url="/repos/$user/$repo/forks?sort=$sort"
     
-    $BASHLETS_NAMESPACE api paginate "$url" id "$limit" "$callback"
+    gitty::api::paginate "$url" id "$limit" "$callback"
 }
 
 # Check if a gist is starred.
 #
 # @cf   https://developer.github.com/v3/activity/starring/#check-if-you-are-starring-a-repository
 # @public
-function bashlets::core::github::repo::is_starred()
+function gitty::repo::is_starred()
 {
     local owner="${1:?User name needed}"
     local repo="${2:?Repository name needed}"
     local url="/user/starred/$owner/$repo"
     local status
 
-    status="$($BASHLETS_NAMESPACE api status "$url")"
+    status="$(gitty::api::status "$url")"
 
     [[ $status == 204 ]]
 }
@@ -168,13 +167,13 @@ function bashlets::core::github::repo::is_starred()
 #
 # @cf   https://developer.github.com/v3/licenses/#get-the-contents-of-a-repositorys-license
 # @public
-function bashlets::core::github::repo::license()
+function gitty::repo::license()
 {
     local user="${1:?User name needed}"
     local repo="${2:?Repository name needed}"
     local url="/repos/$user/$repo/license"
 
-    download_url="$($BASHLETS_NAMESPACE api get "$url" | jq -r .download_url?)"
+    download_url="$(gitty::api::get "$url" | jq -r .download_url?)"
     [[ -n $download_url ]] && curl -s "$download_url"
 }
 
@@ -182,7 +181,7 @@ function bashlets::core::github::repo::license()
 #
 # @cf   https://developer.github.com/v3/projects/#list-repository-projects
 # @public
-function bashlets::core::github::repo::projects()
+function gitty::repo::projects()
 {
     local user="${1:?User name needed}"
     local repo="${2:?Repository name needed}"
@@ -197,8 +196,8 @@ function bashlets::core::github::repo::projects()
         #
         # @cf https://developer.github.com/v3/projects/
 
-        BASHLETS_CORE_GITHUB_API_CUSTOM_HEADERS="$BASHLETS_CORE_GITHUB_API_CUSTOM_HEADERS -H 'Accept: application/vnd.github.inertia-preview+json'"
-        $BASHLETS_NAMESPACE api paginate "$url" id "$limit" "$callback"
+        GITTY_API_CUSTOM_HEADERS="$GITTY_API_CUSTOM_HEADERS -H 'Accept: application/vnd.github.inertia-preview+json'"
+        gitty::api::paginate "$url" id "$limit" "$callback"
     )
 }
 
@@ -206,14 +205,14 @@ function bashlets::core::github::repo::projects()
 #
 # @cf   https://developer.github.com/v3/repos/contents/#get-the-readme
 # @public
-function bashlets::core::github::repo::readme()
+function gitty::repo::readme()
 {
     local user="${1:?User name needed}"
     local repo="${2:?Repository name needed}"
     local url="/repos/$user/$repo/readme"
     local download_url
 
-    download_url="$($BASHLETS_NAMESPACE api get "$url" | jq -r .download_url?)"
+    download_url="$(gitty::api::get "$url" | jq -r .download_url?)"
     [[ -n $download_url ]] && curl -s "$download_url"
 }
 
@@ -221,48 +220,48 @@ function bashlets::core::github::repo::readme()
 #
 # @cf   https://developer.github.com/v3/activity/starring/#star-a-repository
 # @public
-function bashlets::core::github::repo::star()
+function gitty::repo::star()
 {
     local owner="${1:?User name needed}"
     local repo="${2:?Repository name needed}"
     local url="/user/starred/$owner/$repo"
 
-    $BASHLETS_NAMESPACE api put "$url"
+    gitty::api::put "$url"
 }
 
 # List Stargazers for a repository.
 #
 # @cf   https://developer.github.com/v3/activity/starring/#list-stargazers
 # @public
-function bashlets::core::github::repo::stargazers()
+function gitty::repo::stargazers()
 {
     local owner="${1:?User name needed}"
     local repo="${2:?Repository name needed}"
     local limit="${3:-100}" callback="${4:-cat}"
     local url="/repos/$owner/$repo/stargazers"
 
-    $BASHLETS_NAMESPACE api paginate "$url" login "$limit" "$callback"
+    gitty::api::paginate "$url" login "$limit" "$callback"
 }
 
 # List tags for a repository.
 #
 # @cf   https://developer.github.com/v3/repos/#list-tags
 # @public
-function bashlets::core::github::repo::tags()
+function gitty::repo::tags()
 {
     local user="${1:?User name needed}"
     local repo="${2:?Repository name needed}"
     local limit="${3:-100}" callback="${4:-cat}"
     local url="/repos/$user/$repo/tags"
     
-    $BASHLETS_NAMESPACE api paginate "$url" sha "$limit" "$callback"
+    gitty::api::paginate "$url" sha "$limit" "$callback"
 }
 
 # List all topics for a repository.
 #
 # @cf   https://developer.github.com/v3/repos/#list-all-topics-for-a-repository
 # @public
-function bashlets::core::github::repo::topics()
+function gitty::repo::topics()
 {
     local user="${1:?User name needed}"
     local repo="${2:?Repository name needed}"
@@ -274,8 +273,8 @@ function bashlets::core::github::repo::topics()
         # return repository results, we must provide a custom media type in the
         # Accept header.
 
-        BASHLETS_CORE_GITHUB_API_CUSTOM_HEADERS="$BASHLETS_CORE_GITHUB_API_CUSTOM_HEADERS -H 'Accept: application/vnd.github.mercy-preview+json'"
-        $BASHLETS_NAMESPACE api get "$url" .names[]
+        GITTY_API_CUSTOM_HEADERS="$GITTY_API_CUSTOM_HEADERS -H 'Accept: application/vnd.github.mercy-preview+json'"
+        gitty::api::get "$url" .names[]
     )
 }
 
@@ -283,13 +282,13 @@ function bashlets::core::github::repo::topics()
 #
 # @cf   https://developer.github.com/v3/activity/starring/#unstar-a-repository
 # @public
-function bashlets::core::github::repo::unstar()
+function gitty::repo::unstar()
 {
     local owner="${1:?User name needed}"
     local repo="${2:?Repository name needed}"
     local url="/user/starred/$owner/$repo"
 
-    $BASHLETS_NAMESPACE api delete "$url"
+    gitty::api::delete "$url"
 }
 
 # Local variables:

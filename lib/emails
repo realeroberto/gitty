@@ -9,7 +9,7 @@
 #                                        
 # Gitty -- A GitHub client in Bash
 #
-# Copyright (c) 2014-9 Roberto Reale
+# Copyright (c) 2014-20 Roberto Reale
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -32,50 +32,48 @@
 ################################################################################
 
 
-source bashlets core::github::api
-source bashlets core::github::json
 
 # Add email address(es).
 #
 # @cf   https://developer.github.com/v3/users/emails/#add-email-addresses
 # @public
-function bashlets::core::github::emails::add()
+function gitty::emails::add()
 {
     local url="/user/emails"
     local data
 
     [[ $# -gt 0 ]] || return
 
-    data="$($BASHLETS_NAMESPACE json build_array "$@")"
+    data="$(gitty::json::build_array "$@")"
 
-    $BASHLETS_NAMESPACE api post "$url" "$data" length
+    gitty::api::post "$url" "$data" length
 }
 
 # Delete email address(es).
 #
 # @cf   https://developer.github.com/v3/users/emails/#delete-email-addresses
 # @public
-function bashlets::core::github::emails::delete()
+function gitty::emails::delete()
 {
     local url="/user/emails"
     local data
 
     [[ $# -gt 0 ]] || return
 
-    data="$($BASHLETS_NAMESPACE json build_array "$@")"
+    data="$(gitty::json::build_array "$@")"
 
-    $BASHLETS_NAMESPACE api delete "$url" "$data"
+    gitty::api::delete "$url" "$data"
 }
 
 # Toggle primary email visibility.
 #
 # @cf   https://developer.github.com/v3/users/emails/#toggle-primary-email-visibility
 # @public
-function bashlets::core::github::emails::toggle_primary_visibility()
+function gitty::emails::toggle_primary_visibility()
 {
     local url="/user/email/visibility"
 
-    $BASHLETS_NAMESPACE api patch "$url" "" .[].visibility
+    gitty::api::patch "$url" "" .[].visibility
 }
 
 

@@ -9,7 +9,7 @@
 #                                        
 # Gitty -- A GitHub client in Bash
 #
-# Copyright (c) 2014-9 Roberto Reale
+# Copyright (c) 2014-20 Roberto Reale
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -32,27 +32,26 @@
 ################################################################################
 
 
-source bashlets core::github::defs
 
-function bashlets_error()
+function __github_error()
 {
     echo "$@" >&2
 }
 
-BASHLETS_ERROR=bashlets_error
+GITHUB_ERROR=__github_error
 
 
-function __bashlets::core::github::api::extract_headers()
+function __gitty::api::extract_headers()
 {
     sed -n '1,/^\r*$/p' <<<"$1"
 }
 
-function __bashlets::core::github::api::extract_body()
+function __gitty::api::extract_body()
 {
     sed '1,/^\r*$/d; $d' <<<"$1"
 }
 
-function __bashlets::core::github::api::extract_http_code()
+function __gitty::api::extract_http_code()
 {
     sed -n '$p' <<<"$1"
 }
@@ -60,11 +59,11 @@ function __bashlets::core::github::api::extract_http_code()
 # Make a generic HTTP request.
 #
 # @public
-function bashlets::core::github::api::request()
+function gitty::api::request()
 {
     local what="${1:-body}" expected="${2:-200}" ; shift 2
 
-    function __bashlets::core::github::api::request()
+    function __gitty::api::request()
     {
         local accept user_agent basic_auth oauth_token
         local response headers body http_code
@@ -74,17 +73,17 @@ function bashlets::core::github::api::request()
         accept="-H 'Accept: application/vnd.github.v3+json'"
 
         # @cf https://developer.github.com/v3/#user-agent-required
-        if [[ -n $BASHLETS_CORE_GITHUB_API_USER_AGENT ]]
+        if [[ -n $GITTY_API_USER_AGENT ]]
         then
-            user_agent="-H 'User-Agent: $BASHLETS_CORE_GITHUB_API_USER_AGENT'"
+            user_agent="-H 'User-Agent: $GITTY_API_USER_AGENT'"
         fi
 
-        if [[ -n $BASHLETS_CORE_GITHUB_API_BASIC_AUTH ]]
+        if [[ -n $GITTY_API_BASIC_AUTH ]]
         then
-            basic_auth="-u $BASHLETS_CORE_GITHUB_API_BASIC_AUTH"
-        elif [[ -n $BASHLETS_CORE_GITHUB_API_OAUTH_TOKEN ]]
+            basic_auth="-u $GITTY_API_BASIC_AUTH"
+        elif [[ -n $GITTY_API_OAUTH_TOKEN ]]
         then
-            oauth_token="-H 'Authorization: token $BASHLETS_CORE_GITHUB_API_OAUTH_TOKEN'"
+            oauth_token="-H 'Authorization: token $GITTY_API_OAUTH_TOKEN'"
         fi
 
         # Perform HTTP request
@@ -94,46 +93,46 @@ function bashlets::core::github::api::request()
                 "$user_agent"                                              \
                 "$basic_auth"                                              \
                 "$oauth_token"                                             \
-                "$BASHLETS_CORE_GITHUB_API_CUSTOM_HEADERS"                 \
+                "$GITTY_API_CUSTOM_HEADERS"                 \
                 --write-out '\\n%{http_code}\\n'                           \
                 "$@"
         )"
 
-        if [[ -n $BASHLETS_CORE_GITHUB_API_DEBUG ]]
+        if [[ -n $GITTY_API_DEBUG ]]
         then
             echo "$response" >&2
         fi
 
         # Extract headers, body, HTTP code
-          headers="$( __bashlets::core::github::api::extract_headers   "$response")"
-             body="$( __bashlets::core::github::api::extract_body      "$response")"
-        http_code="$( __bashlets::core::github::api::extract_http_code "$response")"
+          headers="$( __gitty::api::extract_headers   "$response")"
+             body="$( __gitty::api::extract_body      "$response")"
+        http_code="$( __gitty::api::extract_http_code "$response")"
 
         # Check HTTP code
         if [[ $http_code == 000 ]]
         then
-            $BASHLETS_ERROR "$BASHLETS_CORE_GITHUB_API_ERROR_HEADER [cURL error]"
-            return $BASHLETS_CORE_GITHUB_API_ERROR
+            $GITHUB_ERROR "$GITTY_API_ERROR_HEADER [cURL error]"
+            return $GITTY_API_ERROR
         elif [[ $what != http_code && $http_code != $expected ]]
         then
             error_message="$(jq -r .message <<<"$body")"
-            $BASHLETS_ERROR "$BASHLETS_CORE_GITHUB_API_ERROR_HEADER [$error_message]"
-            return $BASHLETS_CORE_GITHUB_API_ERROR
+            $GITHUB_ERROR "$GITTY_API_ERROR_HEADER [$error_message]"
+            return $GITTY_API_ERROR
         fi
 
         # Echo headers/body/http_code
         [[ $what != none ]] && eval echo "\"\$$what\""
     }
 
-    __bashlets::core::github::api::request "$@"
+    __gitty::api::request "$@"
 }
 
 # Filter JSON content.
 #
 # @public
-function bashlets::core::github::api::filter()
+function gitty::api::filter()
 {
-    if [[ -n $BASHLETS_CORE_GITHUB_API_FULL_JSON ]]
+    if [[ -n $GITTY_API_FULL_JSON ]]
     then
         cat
     else
@@ -145,21 +144,21 @@ function bashlets::core::github::api::filter()
 #
 # @cf   https://developer.github.com/v3/#http-verbs
 # @public
-function bashlets::core::github::api::get()
+function gitty::api::get()
 {
     local url="$1" ; shift
 
     [[ -n $url ]] || return
 
-    bashlets::core::github::api::request body 200            \
-        "$(printf "%q" "${BASHLETS_CORE_GITHUB_API_ENDPOINT}${url}")" \
-        | bashlets::core::github::api::filter "$@"
+    gitty::api::request body 200            \
+        "$(printf "%q" "${GITTY_API_ENDPOINT}${url}")" \
+        | gitty::api::filter "$@"
 }
 
 # Extract a given value from the HTTP headers.
 #
 # @public
-function bashlets::core::github::api::extract_header_value()
+function gitty::api::extract_header_value()
 {
     local headers="${1:?Headers needed}" key="${2:-[^:]\+}"
 
@@ -170,13 +169,13 @@ function bashlets::core::github::api::extract_header_value()
 #
 # @cf   https://developer.github.com/v3/#pagination
 # @public
-function bashlets::core::github::api::extract_rels()
+function gitty::api::extract_rels()
 {
     local headers="${1:?Headers needed}" filter="${2:-.+}"
     local regex="<(.+)>\;[[:space:]]rel=\"($filter)\""
 
     IFS=, read -a rels <<<$(
-        bashlets::core::github::api::extract_header_value "$headers" Link
+        gitty::api::extract_header_value "$headers" Link
     )
 
     for rel in "${rels[@]}"
@@ -192,15 +191,15 @@ function bashlets::core::github::api::extract_rels()
 #
 # @cf   https://developer.github.com/v3/#pagination
 # @public
-function bashlets::core::github::api::extract_rel()
+function gitty::api::extract_rel()
 {
     local headers="${1:?Headers needed}" key="${2:-next}"
     local regex="${key}:(.*)" rel
 
-    rel="$(bashlets::core::github::api::extract_rels "$headers" "$key")"
+    rel="$(gitty::api::extract_rels "$headers" "$key")"
     if [[ $rel =~ $regex ]]
     then
-        echo "${BASH_REMATCH[1]#${BASHLETS_CORE_GITHUB_API_ENDPOINT}}"
+        echo "${BASH_REMATCH[1]#${GITTY_API_ENDPOINT}}"
     fi
 }
 
@@ -208,31 +207,31 @@ function bashlets::core::github::api::extract_rel()
 #
 # @cf   https://developer.github.com/v3/#pagination
 # @public
-function bashlets::core::github::api::next()
+function gitty::api::next()
 {
     local headers="${1:?Headers needed}"
-    bashlets::core::github::api::extract_rel "$headers" next
+    gitty::api::extract_rel "$headers" next
 }
 
 # Get the link relation for the last page of results.
 #
 # @cf   https://developer.github.com/v3/#pagination
 # @public
-function bashlets::core::github::api::last()
+function gitty::api::last()
 {
     local headers="${1:?Headers needed}"
-    bashlets::core::github::api::extract_rel "$headers" last
+    gitty::api::extract_rel "$headers" last
 }
 
 # Get the number of result pages.
 #
 # @cf   https://developer.github.com/v3/#pagination
 # @public
-function bashlets::core::github::api::count()
+function gitty::api::count()
 {
     local headers="${1:?Headers needed}"
     local regex="page=([0-9]+)" last
-    last="$(bashlets::core::github::api::last "$headers")"
+    last="$(gitty::api::last "$headers")"
     [[ $last =~ $regex ]] && echo "${BASH_REMATCH[1]}"
 }
 
@@ -240,7 +239,7 @@ function bashlets::core::github::api::count()
 #
 # @cf   https://developer.github.com/v3/#pagination
 # @public
-function bashlets::core::github::api::paginate()
+function gitty::api::paginate()
 {
     local url="$1" key="$2"
     local limit="${3:-100}" callback="${4:-cat}"
@@ -255,14 +254,14 @@ function bashlets::core::github::api::paginate()
         declare -a items
 
         response="$(
-            bashlets::core::github::api::request response 200        \
-                "$(printf "%q" "${BASHLETS_CORE_GITHUB_API_ENDPOINT}${url}")"
+            gitty::api::request response 200        \
+                "$(printf "%q" "${GITTY_API_ENDPOINT}${url}")"
         )"
 
-        headers="$( __bashlets::core::github::api::extract_headers "$response")"
-           body="$( __bashlets::core::github::api::extract_body    "$response")"
+        headers="$( __gitty::api::extract_headers "$response")"
+           body="$( __gitty::api::extract_body    "$response")"
 
-        items=("$(echo "$body" | bashlets::core::github::api::filter ".[].\"$key\"")")
+        items=("$(echo "$body" | gitty::api::filter ".[].\"$key\"")")
 
         for item in "${items[@]}"
         do
@@ -271,7 +270,7 @@ function bashlets::core::github::api::paginate()
             [[ -n $item ]] && echo "$item"
         done
 
-        next="$(bashlets::core::github::api::next "$headers")"
+        next="$(gitty::api::next "$headers")"
         [[ -z $next || $next == $url ]] && break
         url="$next"
 
@@ -281,41 +280,41 @@ function bashlets::core::github::api::paginate()
 # Get the HTTP status code.
 #
 # @public
-function bashlets::core::github::api::status()
+function gitty::api::status()
 {
     local url="$1" ; shift
 
     [[ -n $url ]] || return
 
-    bashlets::core::github::api::request http_code 000       \
-        "$(printf "%q" "${BASHLETS_CORE_GITHUB_API_ENDPOINT}${url}")"
+    gitty::api::request http_code 000       \
+        "$(printf "%q" "${GITTY_API_ENDPOINT}${url}")"
 }
 
 # Get the HTTP headers.
 #
 # @public
-function bashlets::core::github::api::header()
+function gitty::api::header()
 {
     local url="$1" key="${2:-[^:]\+}"
 
     [[ -n $url ]] || return
 
-    bashlets::core::github::api::request headers 200         \
-        "$(printf "%q" "${BASHLETS_CORE_GITHUB_API_ENDPOINT}${url}")" \
+    gitty::api::request headers 200         \
+        "$(printf "%q" "${GITTY_API_ENDPOINT}${url}")" \
         | grep "^$key: "
 }
 
 # Extract a given value from the HTTP headers.
 #
 # @public
-function bashlets::core::github::api::header_value()
+function gitty::api::header_value()
 {
     local url="$1" key="${2:-[^:]\+}"
 
     [[ -n $url ]] || return
 
-    bashlets::core::github::api::request headers 200         \
-        "$(printf "%q" "${BASHLETS_CORE_GITHUB_API_ENDPOINT}${url}")" \
+    gitty::api::request headers 200         \
+        "$(printf "%q" "${GITTY_API_ENDPOINT}${url}")" \
         | sed -n "s/^$key: \(.*\)/\\1/p"
 }
 
@@ -323,90 +322,90 @@ function bashlets::core::github::api::header_value()
 #
 # @cf   https://developer.github.com/v3/#http-verbs
 # @public
-function bashlets::core::github::api::post()
+function gitty::api::post()
 {
     local url="$1" data="$2" ; shift 2
 
-    [[ -n $url || -n $BASHLETS_CORE_GITHUB_API_OAUTH_TOKEN ]] || return
+    [[ -n $url || -n $GITTY_API_OAUTH_TOKEN ]] || return
 
-    bashlets::core::github::api::request body 201 -X POST    \
+    gitty::api::request body 201 -X POST    \
         "-H 'Content-Type: application/json'"                \
         --data "$(printf "%q" "$data")"                      \
-        "$(printf "%q" "${BASHLETS_CORE_GITHUB_API_ENDPOINT}${url}")" \
-        | bashlets::core::github::api::filter "$@"
+        "$(printf "%q" "${GITTY_API_ENDPOINT}${url}")" \
+        | gitty::api::filter "$@"
 }
 
 # Specialized POST method that expects a 200 status code.
 #
 # @cf   https://developer.github.com/v3/#http-verbs
 # @public
-function bashlets::core::github::api::post200()
+function gitty::api::post200()
 {
     local url="$1" data="$2"
     local mime="${3:-application/json}"
 
     [[ -n $url ]] || return
 
-    $BASHLETS_NAMESPACE api request body 200 -X POST           \
+    gitty::api::request body 200 -X POST           \
         "-H 'Content-Type: $mime'"                             \
         --data "$(printf "%q" "$data")"                        \
-        "$(printf "%q" "${BASHLETS_CORE_GITHUB_API_ENDPOINT}${url}")"
+        "$(printf "%q" "${GITTY_API_ENDPOINT}${url}")"
 }
 
 # Create a resource in an asynchronous fashion.
 #
 # @cf   https://developer.github.com/v3/#http-verbs
 # @public
-function bashlets::core::github::api::post202()
+function gitty::api::post202()
 {
     local url="$1" data="$2" ; shift 2
 
-    [[ -n $url || -n $BASHLETS_CORE_GITHUB_API_OAUTH_TOKEN ]] || return
+    [[ -n $url || -n $GITTY_API_OAUTH_TOKEN ]] || return
 
-    bashlets::core::github::api::request body 202 -X POST    \
+    gitty::api::request body 202 -X POST    \
         "-H 'Content-Type: application/json'"                \
         --data "$(printf "%q" "$data")"                      \
-        "$(printf "%q" "${BASHLETS_CORE_GITHUB_API_ENDPOINT}${url}")" \
-        | bashlets::core::github::api::filter "$@"
+        "$(printf "%q" "${GITTY_API_ENDPOINT}${url}")" \
+        | gitty::api::filter "$@"
 }
 
 # Update a resource with partial JSON data.
 #
 # @cf   https://developer.github.com/v3/#http-verbs
 # @public
-function bashlets::core::github::api::patch()
+function gitty::api::patch()
 {
     local url="$1" data="$2" ; shift 2
 
-    [[ -n $url || -n $BASHLETS_CORE_GITHUB_API_OAUTH_TOKEN ]] || return
+    [[ -n $url || -n $GITTY_API_OAUTH_TOKEN ]] || return
 
-    bashlets::core::github::api::request body 200 -X PATCH   \
+    gitty::api::request body 200 -X PATCH   \
         "-H 'Content-Type: application/json'"                \
         --data "$(printf "%q" "$data")"                      \
-        "$(printf "%q" "${BASHLETS_CORE_GITHUB_API_ENDPOINT}${url}")" \
-        | bashlets::core::github::api::filter "$@"
+        "$(printf "%q" "${GITTY_API_ENDPOINT}${url}")" \
+        | gitty::api::filter "$@"
 }
 
 # Replace a resource or a collection.
 #
 # @cf   https://developer.github.com/v3/#http-verbs
 # @public
-function bashlets::core::github::api::put()
+function gitty::api::put()
 {
     local url="$1" data="$2"
 
-    [[ -n $url || -n $BASHLETS_CORE_GITHUB_API_OAUTH_TOKEN ]] || return
+    [[ -n $url || -n $GITTY_API_OAUTH_TOKEN ]] || return
 
     if [[ -n $data ]]
     then
-        bashlets::core::github::api::request none 204 -X PUT \
+        gitty::api::request none 204 -X PUT \
             "-H 'Content-Type: application/json'"            \
             --data "$(printf "%q" "$data")"                  \
-            "$(printf "%q" "${BASHLETS_CORE_GITHUB_API_ENDPOINT}${url}")"
+            "$(printf "%q" "${GITTY_API_ENDPOINT}${url}")"
     else
-        bashlets::core::github::api::request none 204 -X PUT \
+        gitty::api::request none 204 -X PUT \
             -H "'Content-Length: 0'"                         \
-            "$(printf "%q" "${BASHLETS_CORE_GITHUB_API_ENDPOINT}${url}")"
+            "$(printf "%q" "${GITTY_API_ENDPOINT}${url}")"
     fi
 }
 
@@ -414,21 +413,21 @@ function bashlets::core::github::api::put()
 #
 # @cf   https://developer.github.com/v3/#http-verbs
 # @public
-function bashlets::core::github::api::delete()
+function gitty::api::delete()
 {
     local url="$1" data="$2"
 
-    [[ -n $url || -n $BASHLETS_CORE_GITHUB_API_OAUTH_TOKEN ]] || return
+    [[ -n $url || -n $GITTY_API_OAUTH_TOKEN ]] || return
 
     if [[ -n $data ]]
     then
-        bashlets::core::github::api::request none 204 -X DELETE  \
+        gitty::api::request none 204 -X DELETE  \
             "-H 'Content-Type: application/json'"                \
             --data "$(printf "%q" "$data")"                      \
-            "$(printf "%q" "${BASHLETS_CORE_GITHUB_API_ENDPOINT}${url}")"
+            "$(printf "%q" "${GITTY_API_ENDPOINT}${url}")"
     else
-        bashlets::core::github::api::request none 204 -X DELETE  \
-            "$(printf "%q" "${BASHLETS_CORE_GITHUB_API_ENDPOINT}${url}")"
+        gitty::api::request none 204 -X DELETE  \
+            "$(printf "%q" "${GITTY_API_ENDPOINT}${url}")"
     fi
 }
 
@@ -436,16 +435,16 @@ function bashlets::core::github::api::delete()
 #
 # @cf   https://developer.github.com/v3/#root-endpoint
 # @public
-function bashlets::core::github::api::endpoint()
+function gitty::api::endpoint()
 {
-    echo "$BASHLETS_CORE_GITHUB_API_ENDPOINT"
+    echo "$GITTY_API_ENDPOINT"
 }
 
 # Get API version.
 #
 # @cf   https://developer.github.com/v3/versions/#versions
 # @public
-function bashlets::core::github::api::version()
+function gitty::api::version()
 {
     echo v3
 }

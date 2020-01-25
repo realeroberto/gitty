@@ -8,7 +8,7 @@
 #                                        
 # Gitty -- A GitHub client in Bash
 #
-# Copyright (c) 2014-9 Roberto Reale
+# Copyright (c) 2014-20 Roberto Reale
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -33,12 +33,12 @@
 load 'lib/bats-support/load'
 load 'lib/bats-assert/load'
 
-source bashlets core::github::user
+source gitty.sh
 
-[[ -n $BASHLETS_CORE_GITHUB_API_USERNAME ]] || fail "BASHLETS_CORE_GITHUB_API_USERNAME undefined"
+[[ -n $GITTY_API_USERNAME ]] || fail "GITTY_API_USERNAME undefined"
 
 @test "core::github::user::repos: list GitHub repositories for the given user" {
-    $BASHLETS_NAMESPACE user repos $BASHLETS_CORE_GITHUB_API_USERNAME
+    gitty::user::repos $GITTY_API_USERNAME
     assert_success
 }
 

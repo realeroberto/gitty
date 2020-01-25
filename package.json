@@ -1,7 +1,7 @@
 {
         "name": "gitty",
-        "description": "A client for the GitHub REST API v3.",
-        "version": "0.1",
+        "description": "A Bash client for the GitHub REST API v3.",
+        "version": "0.2",
         "author": {
                 "name": "Roberto Reale",
                 "email": "roberto@reale.me"

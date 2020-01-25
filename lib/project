@@ -9,7 +9,7 @@
 #                                        
 # Gitty -- A GitHub client in Bash
 #
-# Copyright (c) 2014-9 Roberto Reale
+# Copyright (c) 2014-20 Roberto Reale
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -32,14 +32,13 @@
 ################################################################################
 
 
-source bashlets core::github::api
 
 # Create a project.
 #
 # @cf   https://developer.github.com/v3/projects/#create-a-repository-project
 # @cf   https://developer.github.com/v3/projects/#create-an-organization-project
 # @public
-function bashlets::core::github::project::create()
+function gitty::project::create()
 {
     local name="${1:?Project name required}"
     local text="$2"
@@ -75,8 +74,8 @@ function bashlets::core::github::project::create()
         #
         # @cf https://developer.github.com/v3/projects/
 
-        BASHLETS_CORE_GITHUB_API_CUSTOM_HEADERS="$BASHLETS_CORE_GITHUB_API_CUSTOM_HEADERS -H 'Accept: application/vnd.github.inertia-preview+json'"
-        $BASHLETS_NAMESPACE api post "$url" "$json" .id
+        GITTY_API_CUSTOM_HEADERS="$GITTY_API_CUSTOM_HEADERS -H 'Accept: application/vnd.github.inertia-preview+json'"
+        gitty::api::post "$url" "$json" .id
     )
 }
 
@@ -84,31 +83,31 @@ function bashlets::core::github::project::create()
 #
 # @cf   https://developer.github.com/v3/projects/#get-a-project
 # @public
-function bashlets::core::github::project::creator()
+function gitty::project::creator()
 {
     local id="${1:?Project id required}"
     local url="/projects/$id"
 
-    bashlets::core::github::project::get "$id" .creator.login
+    gitty::project::get "$id" .creator.login
 }
 
 # Delete a project.
 #
 # @cf   https://developer.github.com/v3/projects/#delete-a-project
 # @public
-function bashlets::core::github::project::delete()
+function gitty::project::delete()
 {
     local id="${1:?Project id required}"
     local url="/projects/$id"
 
-    $BASHLETS_NAMESPACE api delete "$url"
+    gitty::api::delete "$url"
 }
 
 # Edit a project.
 #
 # @cf   https://developer.github.com/v3/projects/#update-a-project
 # @public
-function bashlets::core::github::project::edit()
+function gitty::project::edit()
 {
     echo Unimplemented >&2
 }
@@ -117,7 +116,7 @@ function bashlets::core::github::project::edit()
 #
 # @cf   https://developer.github.com/v3/projects/#get-a-project
 # @public
-function bashlets::core::github::project::get()
+function gitty::project::get()
 {
     local id="${1:?Project id required}"
     local key="${2:-.}"
@@ -130,8 +129,8 @@ function bashlets::core::github::project::get()
         #
         # @cf https://developer.github.com/v3/projects/
 
-        BASHLETS_CORE_GITHUB_API_CUSTOM_HEADERS="$BASHLETS_CORE_GITHUB_API_CUSTOM_HEADERS -H 'Accept: application/vnd.github.inertia-preview+json'"
-        $BASHLETS_NAMESPACE api get "$url" "$key"
+        GITTY_API_CUSTOM_HEADERS="$GITTY_API_CUSTOM_HEADERS -H 'Accept: application/vnd.github.inertia-preview+json'"
+        gitty::api::get "$url" "$key"
     )
 }
 
@@ -139,33 +138,33 @@ function bashlets::core::github::project::get()
 #
 # @cf   https://developer.github.com/v3/projects/#get-a-project
 # @public
-function bashlets::core::github::project::name()
+function gitty::project::name()
 {
     local id="${1:?Project id required}"
 
-    bashlets::core::github::project::get "$id" .name
+    gitty::project::get "$id" .name
 }
 
 # Get a project state.
 #
 # @cf   https://developer.github.com/v3/projects/#get-a-project
 # @public
-function bashlets::core::github::project::state()
+function gitty::project::state()
 {
     local id="${1:?Project id required}"
 
-    bashlets::core::github::project::get "$id" .state
+    gitty::project::get "$id" .state
 }
 
 # Get a project text.
 #
 # @cf   https://developer.github.com/v3/projects/#get-a-project
 # @public
-function bashlets::core::github::project::text()
+function gitty::project::text()
 {
     local id="${1:?Project id required}"
 
-    bashlets::core::github::project::get "$id" .body
+    gitty::project::get "$id" .body
 }
 
 

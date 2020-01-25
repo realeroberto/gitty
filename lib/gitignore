@@ -9,7 +9,7 @@
 #                                        
 # Gitty -- A GitHub client in Bash
 #
-# Copyright (c) 2014-9 Roberto Reale
+# Copyright (c) 2014-20 Roberto Reale
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -32,18 +32,17 @@
 ################################################################################
 
 
-source bashlets core::github::api
 
 # Fetch a .gitignore template by name.
 #
 # @cf   https://developer.github.com/v3/gitignore/#get-a-single-template
 # @public
-function bashlets::core::github::gitignore::content()
+function gitty::gitignore::content()
 {
     local name="${1:?Template name required}"
     local url="/gitignore/templates/$name"
     
-    $BASHLETS_NAMESPACE api get "$url" .source
+    gitty::api::get "$url" .source
 }
 
 
