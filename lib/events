@@ -31,28 +31,22 @@
 #
 ################################################################################
 
-source lib/api
-source lib/commit
-source lib/commit_comment
-source lib/conduct
-source lib/defs
-source lib/emails
-source lib/emoji
-source lib/events
-source lib/gist
-source lib/gist_comment
-source lib/github
-source lib/gitignore
-source lib/json
-source lib/license
-source lib/markdown
-source lib/my
-source lib/org
-source lib/path
-source lib/project
-source lib/rate_limit
-source lib/repo
-source lib/user
+
+
+# List public events IDs.
+#
+# @cf   https://developer.github.com/v3/activity/events/#list-public-events
+# @public
+function gitty::events::id()
+{
+    local callback="${1:-cat}"
+    local url="/events"
+
+    # Events support pagination, however the per_page option is unsupported.
+    # The fixed page size is 30 items. Fetching up to ten pages is supported,
+    # for a total of 300 events.
+    gitty::api::paginate "$url" id 30 "$callback"
+}
 
 # Local variables:
 # mode: shell-script
