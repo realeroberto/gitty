@@ -37,6 +37,8 @@
 # global variables
 ################################################################################
 
+PROGRAM_NAME=gitty-install
+PROGRAM_VERSION=0.1
 GITTY_BASE=~/.gitty
 GITTY_BIN_TARGETS=~/.local/bin:/usr/local/bin
 
@@ -45,6 +47,8 @@ branch=master
 
 # set the current installation as the default one
 unset set_as_default
+
+unset current_branch
 
 # verbose output
 verbose=:
@@ -59,7 +63,7 @@ function usage()
     cat <<-EOF
 		Usage:
 
-		    bashlets-install [ -D ] [ -B <branch> ] [ -L ]
+		    $PROGRAM_NAME [ -D ] [ -B <branch> ] [ -L ]
 
 		Options:
 
@@ -76,7 +80,7 @@ function usage()
 function version()
 {
     cat <<-EOF
-		bashlets-install 0.1
+		$PROGRAM_NAME $PROGRAM_VERSION
 	EOF
 } 
 
@@ -85,25 +89,9 @@ function verbose()
     $verbose "$@"
 }
 
-function make_tempdir()
-{
-    GITTY_TEMPDIR=$(mktemp -d)
-}
-
-function erase_tempdir()
-{
-    [[ -n $GITTY_TEMPDIR ]] && rm -fr $GITTY_TEMPDIR
-}
-
-function cd_tempdir()
-{
-    cd $GITTY_TEMPDIR
-}
-
 function cleanup()
 {
     [[ -n $current_branch ]] && git checkout -q $current_branch
-    erase_tempdir
 }
 
 trap cleanup EXIT
@@ -198,7 +186,7 @@ function install_local()
 # parse command line options
 ################################################################################
 
-while getopts "DB:v?V" OPTION
+while getopts "DB:hVv" OPTION
 do
     case $OPTION in
 		D)
@@ -207,10 +195,7 @@ do
 		B)
 			branch=$OPTARG
 			;;
-		v)
-			verbose=echo
-			;;
-		?)
+		h)
 			echo ; version
 			echo ; usage
 			exit 0
@@ -218,6 +203,9 @@ do
 		V)
 			version
 			exit 0
+			;;
+		v)
+			verbose=echo
 			;;
     esac
 done
