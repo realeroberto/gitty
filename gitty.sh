@@ -31,28 +31,30 @@
 #
 ################################################################################
 
-source lib/api
-source lib/commit
-source lib/commit_comment
-source lib/conduct
-source lib/defs
-source lib/emails
-source lib/emoji
-source lib/events
-source lib/gist
-source lib/gist_comment
-source lib/github
-source lib/gitignore
-source lib/json
-source lib/license
-source lib/markdown
-source lib/my
-source lib/org
-source lib/path
-source lib/project
-source lib/rate_limit
-source lib/repo
-source lib/user
+GITTY_LIB_BASE=.
+
+source $GITTY_LIB_BASE/lib/api
+source $GITTY_LIB_BASE/lib/commit
+source $GITTY_LIB_BASE/lib/commit_comment
+source $GITTY_LIB_BASE/lib/conduct
+source $GITTY_LIB_BASE/lib/defs
+source $GITTY_LIB_BASE/lib/emails
+source $GITTY_LIB_BASE/lib/emoji
+source $GITTY_LIB_BASE/lib/events
+source $GITTY_LIB_BASE/lib/gist
+source $GITTY_LIB_BASE/lib/gist_comment
+source $GITTY_LIB_BASE/lib/github
+source $GITTY_LIB_BASE/lib/gitignore
+source $GITTY_LIB_BASE/lib/json
+source $GITTY_LIB_BASE/lib/license
+source $GITTY_LIB_BASE/lib/markdown
+source $GITTY_LIB_BASE/lib/my
+source $GITTY_LIB_BASE/lib/org
+source $GITTY_LIB_BASE/lib/path
+source $GITTY_LIB_BASE/lib/project
+source $GITTY_LIB_BASE/lib/rate_limit
+source $GITTY_LIB_BASE/lib/repo
+source $GITTY_LIB_BASE/lib/user
 
 # Local variables:
 # mode: shell-script

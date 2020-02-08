@@ -5,7 +5,7 @@
 all: ;
 
 install:
-	:
+	scripts/gitty-install -D
 
 doc: README.inc.md mk-doc lib/*
 	cp -p README.inc.md README.md

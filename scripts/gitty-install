@@ -1,0 +1,234 @@
+#!/bin/bash
+
+################################################################################
+#  ____ ____ ____ ____ ____ 
+# ||G |||i |||t |||t |||y ||
+# ||__|||__|||__|||__|||__||
+# |/__\|/__\|/__\|/__\|/__\|
+#                                        
+# Gitty -- A GitHub client in Bash
+#
+# Installation script
+#
+# Copyright (c) 2014-20 Roberto Reale
+# 
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+# 
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+#
+################################################################################
+
+
+#
+# global variables
+################################################################################
+
+GITTY_BASE=~/.gitty
+GITTY_BIN_TARGETS=~/.local/bin:/usr/local/bin
+
+# which Git branch are we interested in?
+branch=master
+
+# set the current installation as the default one
+unset set_as_default
+
+# verbose output
+verbose=:
+
+
+#
+# utilities
+################################################################################
+
+function usage()
+{
+    cat <<-EOF
+		Usage:
+
+		    bashlets-install [ -D ] [ -B <branch> ] [ -L ]
+
+		Options:
+
+           -D      set the current installation as the default one
+           -B      switch to another Git branch
+           -L      install from a local Git repository
+           -v      verbose output
+           -?      display this help and exit
+           -V      output version information and exit
+
+	EOF
+} 
+
+function version()
+{
+    cat <<-EOF
+		bashlets-install 0.1
+	EOF
+} 
+
+function verbose()
+{
+    $verbose "$@"
+}
+
+function make_tempdir()
+{
+    GITTY_TEMPDIR=$(mktemp -d)
+}
+
+function erase_tempdir()
+{
+    [[ -n $GITTY_TEMPDIR ]] && rm -fr $GITTY_TEMPDIR
+}
+
+function cd_tempdir()
+{
+    cd $GITTY_TEMPDIR
+}
+
+function cleanup()
+{
+    [[ -n $current_branch ]] && git checkout -q $current_branch
+    erase_tempdir
+}
+
+trap cleanup EXIT
+
+
+#
+# core logic
+################################################################################
+
+function install_local()
+{
+    local prefix="$1"
+    local install_base install_path
+    local path
+    local rev
+    local destinations
+
+    #
+    # some sanity checks
+    ################################################################################
+
+    # check if we are at the repository's apex
+    [[ $(pwd) == $(git rev-parse --show-toplevel) ]] || {
+        echo "ERROR: must be executed from the root of this Git repository!" >&2
+        exit 1
+    }
+
+    # calculate install base folder
+    install_base="$GITTY_BASE"
+
+    # save the current branch, in case we need to switch branch
+    current_branch=$(git rev-parse --abbrev-ref HEAD)
+
+    #
+    # determine (and create it if needed) the installation folder
+    ################################################################################
+
+    # revision can be given (optionally) on command line
+    rev="${rev:-$(git rev-parse $branch)}"
+
+    # installation folder
+    install_path="$install_base/$rev"
+
+    # check if the installation folder does exist or create it
+    [[ -d $install_path ]] || mkdir -p "$install_path"
+
+    #
+    # install the codebase
+    ################################################################################
+
+    # switch to the given branch
+    git checkout -q $branch || {
+        echo "ERROR: could not switch to $branch branch!" >&2
+        exit 1
+    }
+
+    # export the codebase into the installation folder
+    for path in lib
+    do
+        (git archive $rev $path | tar -x -C "$install_path") 2> /dev/null
+    done
+
+    # if required set the current installation as the default one
+    # ($install_base can contain multiple installations)
+    [[ ! -e $install_base/DEFAULT || -n $set_as_default ]] && {
+        rm -f "$install_base/DEFAULT" && ln -s $rev "$install_base/DEFAULT"
+    }
+
+    #
+    # install the executable scripts if needed
+    ################################################################################
+
+    local d f
+
+    # cycle possible destinations to install the master script into
+    IFS=: read -r -a destinations <<< "$GITTY_BIN_TARGETS"
+    for d in ${destinations[@]}
+    do
+        {
+            # try and create the directory
+            mkdir -p "$d"
+
+            sed -s "s#GITTY_LIB_BASE=.*#GITTY_LIB_BASE=$install_base/DEFAULT#" gitty.sh > $d/gitty.sh
+            
+        } 2> /dev/null || continue
+    done
+
+}
+
+
+#
+# parse command line options
+################################################################################
+
+while getopts "DB:v?V" OPTION
+do
+    case $OPTION in
+		D)
+			set_as_default=1
+			;;
+		B)
+			branch=$OPTARG
+			;;
+		v)
+			verbose=echo
+			;;
+		?)
+			echo ; version
+			echo ; usage
+			exit 0
+			;;
+		V)
+			version
+			exit 0
+			;;
+    esac
+done
+
+install_local
+
+
+# Local variables:
+# mode: shell-script
+# sh-basic-offset: 4
+# sh-indent-comment: t
+# indent-tabs-mode: nil
+# End:
+# ex: ts=4 sw=4 et filetype=sh
