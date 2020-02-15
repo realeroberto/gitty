@@ -112,6 +112,23 @@ function gitty::repo::delete()
     gitty::api::delete "$url"
 }
 
+# List repository events IDs.
+#
+# @cf   https://developer.github.com/v3/activity/events/#list-repository-events
+# @public
+function gitty::repo::events()
+{
+    local user="${1:?User name needed}"
+    local repo="${2:?Repository name needed}"
+    local callback="${3:-cat}"
+    local url="/repos/$user/$repo/events"
+
+    # Events support pagination, however the per_page option is unsupported.
+    # The fixed page size is 30 items. Fetching up to ten pages is supported,
+    # for a total of 300 events.
+    gitty::api::paginate "$url" id 30 "$callback"
+}
+
 # Fork a repository.
 # Note: Forking a Repository happens asynchronously. Therefore, we may have to
 # wait a short period before accessing the new git objects. 
