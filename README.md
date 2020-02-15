@@ -16,7 +16,7 @@ A reasonably sane GNU environment is assumed to be at hand. More specifically, y
 
 To run the test suite, you will need Sam Stephenson's [Bash Automated Testing System](https://github.com/sstephenson/bats).
 
-To check for proper programming will, you need [ShellCheck](https://www.shellcheck.net/).
+To check for proper programming, you will need [ShellCheck](https://www.shellcheck.net/).
 
 
 ## Configuration
@@ -204,6 +204,10 @@ The active links represent implemented parts of the full API.
 
 * [`emoji::url`](#emojiurl)
 
+### `events`
+
+* [`events::id`](#eventsid)
+
 ### `gist`
 
 * [`gist::clone`](#gistclone)
@@ -336,6 +340,7 @@ The active links represent implemented parts of the full API.
 * [`repo::conduct`](#repoconduct)
 * [`repo::create`](#repocreate)
 * [`repo::delete`](#repodelete)
+* [`repo::events`](#repoevents)
 * [`repo::fork`](#repofork)
 * [`repo::forks`](#repoforks)
 * [`repo::is_starred`](#repois_starred)
@@ -515,6 +520,10 @@ Toggle primary email visibility.
 ### `emoji::url`
 
 Get an emoji's url.
+
+### `events::id`
+
+List public events IDs.
 
 ### `gist::clone`
 
@@ -897,6 +906,10 @@ Create a new repository for the authenticated user.
 ### `repo::delete`
 
 Delete a repository.
+
+### `repo::events`
+
+List repository events IDs.
 
 ### `repo::fork`
 

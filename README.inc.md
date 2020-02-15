@@ -16,7 +16,7 @@ A reasonably sane GNU environment is assumed to be at hand. More specifically, y
 
 To run the test suite, you will need Sam Stephenson's [Bash Automated Testing System](https://github.com/sstephenson/bats).
 
-To check for proper programming will, you need [ShellCheck](https://www.shellcheck.net/).
+To check for proper programming, you will need [ShellCheck](https://www.shellcheck.net/).
 
 
 ## Configuration
