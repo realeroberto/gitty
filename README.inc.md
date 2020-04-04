@@ -122,7 +122,7 @@ The active links represent implemented parts of the full API.
     - Traffic
     - Webhooks
 * Search
-    - Repositories
+    - [Repositories](https://developer.github.com/v3/search/#search-repositories)
     - Code
     - Commits
     - Issues

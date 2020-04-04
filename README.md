@@ -122,7 +122,7 @@ The active links represent implemented parts of the full API.
     - Traffic
     - Webhooks
 * Search
-    - Repositories
+    - [Repositories](https://developer.github.com/v3/search/#search-repositories)
     - Code
     - Commits
     - Issues
@@ -352,6 +352,10 @@ The active links represent implemented parts of the full API.
 * [`repo::tags`](#repotags)
 * [`repo::topics`](#repotopics)
 * [`repo::unstar`](#repounstar)
+
+### `search`
+
+* [`search::repositories`](#searchrepositories)
 
 ### `user`
 
@@ -956,6 +960,10 @@ List all topics for a repository.
 ### `repo::unstar`
 
 Unstar a repository.
+
+### `search::repositories`
+
+Find repositories via various criteria.
 
 ### `user::follow`
 
