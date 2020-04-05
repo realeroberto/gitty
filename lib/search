@@ -99,7 +99,7 @@ function gitty::search::labels()
 # @public
 function gitty::search::repositories()
 {
-    local q="${1:-gitty}" selector="${2:-id}"
+    local q="${1:-gitty}" selector="${2:-full_name}"
     limit="${3:-100}" callback="${4:-cat}"
     local url="/search/repositories?q=$q"
     
