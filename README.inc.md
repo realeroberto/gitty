@@ -121,13 +121,14 @@ The active links represent implemented parts of the full API.
     - Statuses
     - Traffic
     - Webhooks
-* Search
+* [Search](https://developer.github.com/v3/search/)
     - [Repositories](https://developer.github.com/v3/search/#search-repositories)
-    - Code
-    - Commits
-    - Issues
-    - Users
-    - Topics
+    - [Code](https://developer.github.com/v3/search/#search-code)
+    - [Commits](https://developer.github.com/v3/search/#search-commits)
+    - [Issues](https://developer.github.com/v3/search/#search-issues-and-pull-requests)
+    - [Users](https://developer.github.com/v3/search/#search-users)
+    - [Topics](https://developer.github.com/v3/search/#search-topics)
+    - [Labels](https://developer.github.com/v3/search/#search-labels)
     - Text match metadata
     - Legacy search
 * Teams

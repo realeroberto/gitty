@@ -121,13 +121,14 @@ The active links represent implemented parts of the full API.
     - Statuses
     - Traffic
     - Webhooks
-* Search
+* [Search](https://developer.github.com/v3/search/)
     - [Repositories](https://developer.github.com/v3/search/#search-repositories)
-    - Code
-    - Commits
-    - Issues
-    - Users
-    - Topics
+    - [Code](https://developer.github.com/v3/search/#search-code)
+    - [Commits](https://developer.github.com/v3/search/#search-commits)
+    - [Issues](https://developer.github.com/v3/search/#search-issues-and-pull-requests)
+    - [Users](https://developer.github.com/v3/search/#search-users)
+    - [Topics](https://developer.github.com/v3/search/#search-topics)
+    - [Labels](https://developer.github.com/v3/search/#search-labels)
     - Text match metadata
     - Legacy search
 * Teams
@@ -335,6 +336,7 @@ The active links represent implemented parts of the full API.
 
 ### `repo`
 
+* [`repo::by_id`](#repoby_id)
 * [`repo::comments`](#repocomments)
 * [`repo::commits`](#repocommits)
 * [`repo::conduct`](#repoconduct)
@@ -355,7 +357,13 @@ The active links represent implemented parts of the full API.
 
 ### `search`
 
+* [`search::code`](#searchcode)
+* [`search::commits`](#searchcommits)
+* [`search::issues`](#searchissues)
+* [`search::labels`](#searchlabels)
 * [`search::repositories`](#searchrepositories)
+* [`search::topics`](#searchtopics)
+* [`search::users`](#searchusers)
 
 ### `user`
 
@@ -891,6 +899,10 @@ Get the current rate limit status.
 
 Get the current rate limit status.
 
+### `repo::by_id`
+
+Get repository by ID (undocumented).
+
 ### `repo::comments`
 
 List commit comments for a repository.
@@ -961,9 +973,33 @@ List all topics for a repository.
 
 Unstar a repository.
 
+### `search::code`
+
+Find file contents via various criteria.
+
+### `search::commits`
+
+Find commits via various criteria.
+
+### `search::issues`
+
+Find issues by state and keyword.
+
+### `search::labels`
+
+Find labels in a repository with names or descriptions that match search
+
 ### `search::repositories`
 
 Find repositories via various criteria.
+
+### `search::topics`
+
+Find topics via various criteria.
+
+### `search::users`
+
+Find users via various criteria.
 
 ### `user::follow`
 
