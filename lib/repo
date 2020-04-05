@@ -33,6 +33,19 @@
 
 
 
+# Get repository by ID (undocumented).
+#
+# @cf   https://github.com/octokit/rest.js/issues/163
+# @public
+function gitty::repo::by_id()
+{
+    local id="${1:-40891491}" # bashlets
+    local selector="${2:-full_name}"
+    local url="/repositories/$id"
+
+    gitty::api::get "$url" ".$selector"
+}
+
 # List commits on a repository.
 #
 # @cf   https://developer.github.com/v3/repos/commits/#list-commits-on-a-repository
