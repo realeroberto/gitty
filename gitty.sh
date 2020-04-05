@@ -38,6 +38,16 @@ do
     source $m
 done
 
+# are we being sourced?
+(return 0 2>/dev/null) && sourced=1 || sourced=0
+
+if [[ $sourced -eq 0 && $# -ge 2 ]]
+then
+    module=$1 ; shift
+    method=$1 ; shift
+    gitty::$module::$method "$@"
+fi
+
 # Local variables:
 # mode: shell-script
 # sh-basic-offset: 4
