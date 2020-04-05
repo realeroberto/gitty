@@ -33,6 +33,66 @@
 
 
 
+# Find file contents via various criteria.
+#
+# @cf   https://developer.github.com/v3/search/#search-code
+# @public
+function gitty::search::code()
+{
+    local q="${1:-gitty}" selector="${2:-url}"
+    limit="${3:-100}" callback="${4:-cat}"
+    local url="/search/code?q=$q"
+    
+    gitty::api::paginate "$url" "$selector" "$limit" "$callback"
+}
+
+# Find commits via various criteria.
+#
+# @cf   https://developer.github.com/v3/search/#search-commits
+# @public
+function gitty::search::commits()
+{
+    local q="${1:-gitty}" selector="${2:-url}"
+    limit="${3:-100}" callback="${4:-cat}"
+    local url="/search/commits?q=$q"
+    
+    (
+        # Note: To access the API we must provide a custom media type in the
+        # Accept header.
+
+        GITTY_API_CUSTOM_HEADERS="$GITTY_API_CUSTOM_HEADERS -H 'Accept: application/vnd.github.cloak-preview'"
+        gitty::api::paginate "$url" "$selector" "$limit" "$callback"
+    )
+}
+
+# Find issues by state and keyword.
+#
+# @cf   https://developer.github.com/v3/search/#search-issues-and-pull-requests
+# @public
+function gitty::search::issues()
+{
+    local q="${1:-gitty}" selector="${2:-url}"
+    limit="${3:-100}" callback="${4:-cat}"
+    local url="/search/issues?q=$q"
+    
+    gitty::api::paginate "$url" "$selector" "$limit" "$callback"
+}
+
+# Find labels in a repository with names or descriptions that match search
+# keywords.
+#
+# @cf   https://developer.github.com/v3/search/#search-labels
+# @public
+function gitty::search::labels()
+{
+    local q="${1:-gitty}" repo="${2:-40891491}" # bashlets
+    local selector="${3:-url}"
+    limit="${4:-100}" callback="${5:-cat}"
+    local url="/search/labels?repository_id=$repo&q=$q"
+    
+    gitty::api::paginate "$url" "$selector" "$limit" "$callback"
+}
+
 # Find repositories via various criteria.
 #
 # @cf   https://developer.github.com/v3/search/#search-repositories
@@ -42,6 +102,40 @@ function gitty::search::repositories()
     local q="${1:-gitty}" selector="${2:-id}"
     limit="${3:-100}" callback="${4:-cat}"
     local url="/search/repositories?q=$q"
+    
+    gitty::api::paginate "$url" "$selector" "$limit" "$callback"
+}
+
+# Find topics via various criteria.
+#
+# @cf   https://developer.github.com/v3/search/#search-topics
+# @public
+function gitty::search::topics()
+{
+    local q="${1:-gitty}" selector="${2:-name}"
+    limit="${3:-100}" callback="${4:-cat}"
+    local url="/search/topics?q=$q"
+    
+    (
+        # Note: The topics property for repositories on GitHub is currently
+        # available for developers to preview. To view the topics property in
+        # calls that return repository results, we must provide a custom media
+        # type in the Accept header.
+
+        GITTY_API_CUSTOM_HEADERS="$GITTY_API_CUSTOM_HEADERS -H 'Accept: application/vnd.github.mercy-preview+json'"
+        gitty::api::paginate "$url" "$selector" "$limit" "$callback"
+    )
+}
+
+# Find users via various criteria.
+#
+# @cf   https://developer.github.com/v3/search/#search-users
+# @public
+function gitty::search::users()
+{
+    local q="${1:-gitty}" selector="${2:-login}"
+    limit="${3:-100}" callback="${4:-cat}"
+    local url="/search/users?q=$q"
     
     gitty::api::paginate "$url" "$selector" "$limit" "$callback"
 }
