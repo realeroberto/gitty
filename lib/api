@@ -261,7 +261,7 @@ function gitty::api::paginate()
         headers="$( __gitty::api::extract_headers "$response")"
            body="$( __gitty::api::extract_body    "$response")"
 
-        items=("$(echo "$body" | gitty::api::filter "if .items then .items[].\"$key\" else .[].\"$key\" end")")
+        items=("$(echo "$body" | gitty::api::filter "if type == \"array\" then .[].\"$key\" else .items[].\"$key\" end")")
 
         for item in "${items[@]}"
         do
