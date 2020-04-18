@@ -128,6 +128,59 @@ function gitty::user::orgs()
     gitty::api::paginate "$url" login "$limit" "$callback"
 }
 
+# List organization events for the authenticated user.
+# Note: This is the user's organization dashboard. You must be authenticated as
+# the user to view this.
+#
+# @cf   https://developer.github.com/v3/activity/events/#list-organization-events-for-the-authenticated-user
+# @public
+function gitty::user::org_received_events()
+{
+    local user="${1:?User name needed}"
+    local org="${2:?Organization login needed}"
+    local selector="${3:-id}" callback="${4:-cat}"
+    local url="/users/$username/events/orgs/$org"
+
+    # Events support pagination, however the per_page option is unsupported.
+    # The fixed page size is 30 items. Fetching up to ten pages is supported,
+    # for a total of 300 events.
+    gitty::api::paginate "$url" "$selector" 30 "$callback"
+}
+
+# List public events for a user.
+#
+# @cf   https://developer.github.com/v3/activity/events/#list-public-events-for-a-user
+# @public
+function gitty::user::public_received_events()
+{
+    local user="${1:?User name needed}"
+    local selector="${2:-id}" callback="${3:-cat}"
+    local url="/users/$username/received_events/public"
+
+    # Events support pagination, however the per_page option is unsupported.
+    # The fixed page size is 30 items. Fetching up to ten pages is supported,
+    # for a total of 300 events.
+    gitty::api::paginate "$url" "$selector" 30 "$callback"
+}
+
+# List events received by the authenticated user.
+# Note: If you are authenticated as the given user, you will see your private
+# events. Otherwise, you'll only see public events.
+#
+# @cf   https://developer.github.com/v3/activity/events/#list-events-received-by-the-authenticated-user
+# @public
+function gitty::user::received_events()
+{
+    local user="${1:?User name needed}"
+    local selector="${2:-id}" callback="${3:-cat}"
+    local url="/users/$username/received_events"
+
+    # Events support pagination, however the per_page option is unsupported.
+    # The fixed page size is 30 items. Fetching up to ten pages is supported,
+    # for a total of 300 events.
+    gitty::api::paginate "$url" "$selector" 30 "$callback"
+}
+
 # List public repositories for the specified user.
 #
 # @cf   https://developer.github.com/v3/repos/#list-user-repositories

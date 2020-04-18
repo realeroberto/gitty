@@ -45,7 +45,7 @@ The active links represent implemented parts of the full API.
 
 
 * Activity
-    - Events
+    - [Events](https://developer.github.com/v3/activity/events/)
     - Event Types & Payloads
     - [Feeds](https://developer.github.com/v3/activity/feeds/)
     - Notifications

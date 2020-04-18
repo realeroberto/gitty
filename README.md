@@ -45,7 +45,7 @@ The active links represent implemented parts of the full API.
 
 
 * Activity
-    - Events
+    - [Events](https://developer.github.com/v3/activity/events/)
     - Event Types & Payloads
     - [Feeds](https://developer.github.com/v3/activity/feeds/)
     - Notifications
@@ -170,6 +170,24 @@ The active links represent implemented parts of the full API.
 * [`api::status`](#apistatus)
 * [`api::version`](#apiversion)
 
+### `auth`
+
+* [`auth::am_following`](#autham_following)
+* [`auth::block`](#authblock)
+* [`auth::blocked_users`](#authblocked_users)
+* [`auth::emails`](#authemails)
+* [`auth::followers`](#authfollowers)
+* [`auth::following`](#authfollowing)
+* [`auth::have_blocked`](#authhave_blocked)
+* [`auth::orgs`](#authorgs)
+* [`auth::public_emails`](#authpublic_emails)
+* [`auth::public_timeline`](#authpublic_timeline)
+* [`auth::public_timeline_url`](#authpublic_timeline_url)
+* [`auth::repos`](#authrepos)
+* [`auth::starred_gists`](#authstarred_gists)
+* [`auth::starred_repos`](#authstarred_repos)
+* [`auth::unblock`](#authunblock)
+
 ### `commit`
 
 * [`commit::comments`](#commitcomments)
@@ -207,7 +225,13 @@ The active links represent implemented parts of the full API.
 
 ### `events`
 
-* [`events::id`](#eventsid)
+* [`events::network`](#eventsnetwork)
+* [`events::org`](#eventsorg)
+* [`events::public`](#eventspublic)
+* [`events::repo`](#eventsrepo)
+* [`events::user_org_received_events`](#eventsuser_org_received_events)
+* [`events::user_public_received`](#eventsuser_public_received)
+* [`events::user_received`](#eventsuser_received)
 
 ### `gist`
 
@@ -276,23 +300,9 @@ The active links represent implemented parts of the full API.
 * [`markdown::from_stream`](#markdownfrom_stream)
 * [`markdown::from_string`](#markdownfrom_string)
 
-### `my`
+### `network`
 
-* [`my::am_following`](#myam_following)
-* [`my::block`](#myblock)
-* [`my::blocked_users`](#myblocked_users)
-* [`my::emails`](#myemails)
-* [`my::followers`](#myfollowers)
-* [`my::following`](#myfollowing)
-* [`my::have_blocked`](#myhave_blocked)
-* [`my::orgs`](#myorgs)
-* [`my::public_emails`](#mypublic_emails)
-* [`my::public_timeline`](#mypublic_timeline)
-* [`my::public_timeline_url`](#mypublic_timeline_url)
-* [`my::repos`](#myrepos)
-* [`my::starred_gists`](#mystarred_gists)
-* [`my::starred_repos`](#mystarred_repos)
-* [`my::unblock`](#myunblock)
+* [`network::events`](#networkevents)
 
 ### `org`
 
@@ -302,6 +312,7 @@ The active links represent implemented parts of the full API.
 * [`org::describe`](#orgdescribe)
 * [`org::edit`](#orgedit)
 * [`org::email`](#orgemail)
+* [`org::events`](#orgevents)
 * [`org::get`](#orgget)
 * [`org::is_blocked`](#orgis_blocked)
 * [`org::location`](#orglocation)
@@ -355,6 +366,10 @@ The active links represent implemented parts of the full API.
 * [`repo::topics`](#repotopics)
 * [`repo::unstar`](#repounstar)
 
+### `root`
+
+* [`root::events`](#rootevents)
+
 ### `search`
 
 * [`search::code`](#searchcode)
@@ -373,6 +388,9 @@ The active links represent implemented parts of the full API.
 * [`user::gists`](#usergists)
 * [`user::is_following`](#useris_following)
 * [`user::keys`](#userkeys)
+* [`user::org_received_events`](#userorg_received_events)
+* [`user::public_received_events`](#userpublic_received_events)
+* [`user::received_events`](#userreceived_events)
 * [`user::repos`](#userrepos)
 * [`user::starred_repos`](#userstarred_repos)
 * [`user::timeline`](#usertimeline)
@@ -469,6 +487,68 @@ Get the HTTP status code.
 
 Get API version.
 
+### `auth::am_following`
+
+Check if the authorized user follows another.
+
+### `auth::block`
+
+Block a user.
+List the users the authenticated user has blocked on her personal account.
+
+### `auth::blocked_users`
+
+List the users the authenticated user has blocked on her personal account.
+
+### `auth::emails`
+
+List email addresses for the authenticated user.
+
+### `auth::followers`
+
+List followers of the authenticated user.
+
+### `auth::following`
+
+List who the authenticated user is following.
+
+### `auth::have_blocked`
+
+Check whether the authorized user has blocked another user.
+
+### `auth::orgs`
+
+List all the organizations for the authenticated user.
+
+### `auth::public_emails`
+
+List public email addresses for the authenticated user.
+
+### `auth::public_timeline`
+
+Get the public timeline for the authenticated user, in Atom format.
+Get the public timeline URI for the authenticated user.
+
+### `auth::public_timeline_url`
+
+Get the public timeline URI for the authenticated user.
+
+### `auth::repos`
+
+List all the repositories for the authenticated user.
+
+### `auth::starred_gists`
+
+List all the starred gists for the authenticated user.
+
+### `auth::starred_repos`
+
+List repositories being starred by the specified user.
+
+### `auth::unblock`
+
+Unblock a user.
+
 ### `commit::comments`
 
 List comments for a commit.
@@ -533,9 +613,33 @@ Toggle primary email visibility.
 
 Get an emoji's url.
 
-### `events::id`
+### `events::network`
+
+List public events for a network of repositories
+
+### `events::org`
+
+List public organization events.
+
+### `events::public`
 
 List public events IDs.
+
+### `events::repo`
+
+List repository events IDs.
+
+### `events::user_org_received_events`
+
+List organization events for the authenticated user.
+
+### `events::user_public_received`
+
+List public events for a user.
+
+### `events::user_received`
+
+List events received by the authenticated user.
 
 ### `gist::clone`
 
@@ -724,67 +828,9 @@ Render an arbitrary Markdown document from stdin.
 Render an arbitrary Markdown document from a string (private method).
 Render an arbitrary Markdown document from a string.
 
-### `my::am_following`
+### `network::events`
 
-Check if the authorized user follows another.
-
-### `my::block`
-
-Block a user.
-List the users the authenticated user has blocked on her personal account.
-
-### `my::blocked_users`
-
-List the users the authenticated user has blocked on her personal account.
-
-### `my::emails`
-
-List email addresses for the authenticated user.
-
-### `my::followers`
-
-List followers of the authenticated user.
-
-### `my::following`
-
-List who the authenticated user is following.
-
-### `my::have_blocked`
-
-Check whether the authorized user has blocked another user.
-
-### `my::orgs`
-
-List all the organizations for the authenticated user.
-
-### `my::public_emails`
-
-List public email addresses for the authenticated user.
-
-### `my::public_timeline`
-
-Get the public timeline for the authenticated user, in Atom format.
-Get the public timeline URI for the authenticated user.
-
-### `my::public_timeline_url`
-
-Get the public timeline URI for the authenticated user.
-
-### `my::repos`
-
-List all the repositories for the authenticated user.
-
-### `my::starred_gists`
-
-List all the starred gists for the authenticated user.
-
-### `my::starred_repos`
-
-List repositories being starred by the specified user.
-
-### `my::unblock`
-
-Unblock a user.
+List public events for a network of repositories
 
 ### `org::block`
 
@@ -810,6 +856,10 @@ Edit an organization.
 ### `org::email`
 
 Get an organization email.
+
+### `org::events`
+
+List public organization events.
 
 ### `org::get`
 
@@ -973,6 +1023,10 @@ List all topics for a repository.
 
 Unstar a repository.
 
+### `root::events`
+
+List public events IDs.
+
 ### `search::code`
 
 Find file contents via various criteria.
@@ -1026,6 +1080,18 @@ Check if the specified user follows another.
 ### `user::keys`
 
 List the verified public keys for the specified user.
+
+### `user::org_received_events`
+
+List organization events for the authenticated user.
+
+### `user::public_received_events`
+
+List public events for a user.
+
+### `user::received_events`
+
+List events received by the authenticated user.
 
 ### `user::repos`
 
