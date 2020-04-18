@@ -132,6 +132,22 @@ function gitty::org::email()
     gitty::api::get "$url" .email
 }
 
+# List public organization events.
+#
+# @cf   https://developer.github.com/v3/activity/events/#list-public-organization-events
+# @public
+function gitty::org::events()
+{
+    local org="${1:?Organization login needed}"
+    local selector="${2:-id}" callback="${3:-cat}"
+    local url="/orgs/$org/events"
+
+    # Events support pagination, however the per_page option is unsupported.
+    # The fixed page size is 30 items. Fetching up to ten pages is supported,
+    # for a total of 300 events.
+    gitty::api::paginate "$url" "$selector" 30 "$callback"
+}
+
 # Get an organization.
 #
 # @cf   https://developer.github.com/v3/orgs/#get-an-organization
