@@ -37,7 +37,7 @@
 #
 # @cf   https://developer.github.com/v3/users/followers/#check-if-you-are-following-a-user
 # @public
-function gitty::my::am_following()
+function gitty::auth::am_following()
 {
     local target_user="${1:?Target user name required}"
     local url="/user/following/$target_user"
@@ -52,7 +52,7 @@ function gitty::my::am_following()
 #
 # @cf   https://developer.github.com/v3/users/blocking/#block-a-user
 # @public
-function gitty::my::block()
+function gitty::auth::block()
 {
     local username="${1:?User login needed}"
 
@@ -74,7 +74,7 @@ function gitty::my::block()
 #
 # @cf   https://developer.github.com/v3/users/blocking/#list-blocked-users
 # @public
-function gitty::my::blocked_users()
+function gitty::auth::blocked_users()
 {
     local url="/user/blocks"
 
@@ -94,7 +94,7 @@ function gitty::my::blocked_users()
 #
 # @cf   https://developer.github.com/v3/users/emails/#list-email-addresses-for-a-user
 # @public
-function gitty::my::emails()
+function gitty::auth::emails()
 {
     local limit="${1:-100}" callback="${2:-cat}"
     local url="/user/emails"
@@ -106,7 +106,7 @@ function gitty::my::emails()
 #
 # @cf   https://developer.github.com/v3/users/followers/#list-followers-of-a-user
 # @public
-function gitty::my::followers()
+function gitty::auth::followers()
 {
     local since="${1:-0}"
     local limit="${3:-100}" callback="${4:-cat}"
@@ -119,7 +119,7 @@ function gitty::my::followers()
 #
 # @cf   https://developer.github.com/v3/users/followers/#list-users-followed-by-another-user
 # @public
-function gitty::my::following()
+function gitty::auth::following()
 {
     local since="${1:-0}"
     local limit="${3:-100}" callback="${4:-cat}"
@@ -132,7 +132,7 @@ function gitty::my::following()
 #
 # @cf   https://developer.github.com/v3/users/blocking/#check-whether-youve-blocked-a-user
 # @public
-function gitty::my::have_blocked()
+function gitty::auth::have_blocked()
 {
     local username="${1:?User login needed}"
     local url="/user/blocks/$username"
@@ -156,7 +156,7 @@ function gitty::my::have_blocked()
 #
 # @cf   https://developer.github.com/v3/orgs/#list-your-organizations
 # @public
-function gitty::my::orgs()
+function gitty::auth::orgs()
 {
     local limit="${1:-100}" callback="${2:-cat}"
     local url="/user/orgs"
@@ -168,7 +168,7 @@ function gitty::my::orgs()
 #
 # @cf   https://developer.github.com/v3/users/emails/#list-public-email-addresses-for-a-user
 # @public
-function gitty::my::public_emails()
+function gitty::auth::public_emails()
 {
     local limit="${1:-100}" callback="${2:-cat}"
     local url="/user/public_emails"
@@ -180,7 +180,7 @@ function gitty::my::public_emails()
 #
 # @cf   https://developer.github.com/v3/repos/#list-your-repositories
 # @public
-function gitty::my::repos()
+function gitty::auth::repos()
 {
     local limit="${1:-100}" callback="${2:-cat}"
     local url="/user/repos"
@@ -192,7 +192,7 @@ function gitty::my::repos()
 #
 # @cf   https://developer.github.com/v3/gists/#list-starred-gists
 # @public
-function gitty::my::starred_gists()
+function gitty::auth::starred_gists()
 {
     local since="${1:-$GITTY_API_EPOCH}"
     local limit="${2:-100}" callback="${3:-cat}"
@@ -205,7 +205,7 @@ function gitty::my::starred_gists()
 #
 # @cf   https://developer.github.com/v3/activity/starring/#list-repositories-being-starred
 # @public
-function gitty::my::starred_repos()
+function gitty::auth::starred_repos()
 {
     local sort="${1:-created}"    # created, updated
     local direction="${2:-desc}"  # asc, desc
@@ -222,14 +222,14 @@ function gitty::my::starred_repos()
 #
 # @cf   https://developer.github.com/v3/activity/feeds/#list-feeds
 # @private
-function gitty::my::private_timeline()
+function gitty::auth::private_timeline()
 {
     local type="${1:-default}"  # default, actor
 
     # `orgs` is not allowed
     [[ $type == default || $type == actor ]] || return
 
-    curl -s "$(gitty::my::private_timeline_url "$type")"
+    curl -s "$(gitty::auth::private_timeline_url "$type")"
 }
 
 # Get the private timeline URI for the authenticated user.
@@ -238,7 +238,7 @@ function gitty::my::private_timeline()
 #
 # @cf   https://developer.github.com/v3/activity/feeds/#list-feeds
 # @private
-function gitty::my::private_timeline_url()
+function gitty::auth::private_timeline_url()
 {
     local type="${1:-default}"  # default, actor, orgs
     local url="/feeds"
@@ -262,16 +262,16 @@ function gitty::my::private_timeline_url()
 #
 # @cf   https://developer.github.com/v3/activity/feeds/#list-feeds
 # @public
-function gitty::my::public_timeline()
+function gitty::auth::public_timeline()
 {
-    curl -s "$(gitty::my::public_timeline_url)"
+    curl -s "$(gitty::auth::public_timeline_url)"
 }
 
 # Get the public timeline URI for the authenticated user.
 #
 # @cf   https://developer.github.com/v3/activity/feeds/#list-feeds
 # @public
-function gitty::my::public_timeline_url()
+function gitty::auth::public_timeline_url()
 {
     local url="/feeds"
 
@@ -282,7 +282,7 @@ function gitty::my::public_timeline_url()
 #
 # @cf   https://developer.github.com/v3/users/blocking/#unblock-a-user
 # @public
-function gitty::my::unblock()
+function gitty::auth::unblock()
 {
     local username="${1:?User login needed}"
 
