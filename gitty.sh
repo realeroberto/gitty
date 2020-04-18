@@ -33,7 +33,7 @@
 
 GITTY_LIB_BASE=.
 
-for m in $(find $GITTY_LIB_BASE/lib/ -type f -exec grep -l "^#\!.*/bash" {} \;)
+for m in $(find $GITTY_LIB_BASE/lib/ \( -type f -a -not -name ".*" \) -exec grep -l "^#\!.*/bash" {} \;)
 do
     source $m
 done
