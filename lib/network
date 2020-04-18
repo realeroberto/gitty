@@ -32,37 +32,23 @@
 ################################################################################
 
 
-# List public events IDs.
-#
-# @cf   https://developer.github.com/v3/activity/events/#list-public-events
-# @public
-function gitty::events::public()
-{
-    gitty::root::events "$@"
-}
 
 # List public events for a network of repositories
 #
 # @cf   https://developer.github.com/v3/activity/events/#list-public-events-for-a-network-of-repositories
 # @public
-function gitty::events::network()
+function gitty::network::events()
 {
-    gitty::network::events "$@"
+    local user="${1:?User name needed}"
+    local repo="${2:?Repository name needed}"
+    local selector="${3:-id}" callback="${4:-cat}"
+    local url="/networks/$user/$repo/events"
+
+    # Events support pagination, however the per_page option is unsupported.
+    # the fixed page size is 30 items. fetching up to ten pages is supported,
+    # for a total of 300 events.
+    #
+    # @cf   https://developer.github.com/v3/activity/events/
+    gitty::api::paginate "$url" "$selector" 30 "$callback"
 }
 
-# List repository events IDs.
-#
-# @cf   https://developer.github.com/v3/activity/events/#list-repository-events
-# @public
-function gitty::events::network()
-{
-    gitty::repo::events "$@"
-}
-
-# Local variables:
-# mode: shell-script
-# sh-basic-offset: 4
-# sh-indent-comment: t
-# indent-tabs-mode: nil
-# End:
-# ex: ts=4 sw=4 et filetype=sh
