@@ -249,6 +249,7 @@ The active links represent implemented parts of the full API.
 * [`gist::get`](#gistget)
 * [`gist::is_starred`](#gistis_starred)
 * [`gist::owner`](#gistowner)
+* [`gist::public`](#gistpublic)
 * [`gist::star`](#giststar)
 * [`gist::unstar`](#gistunstar)
 
@@ -265,7 +266,6 @@ The active links represent implemented parts of the full API.
 
 * [`github::conducts`](#githubconducts)
 * [`github::emojis`](#githubemojis)
-* [`github::gists`](#githubgists)
 * [`github::gitignores`](#githubgitignores)
 * [`github::git_servers`](#githubgit_servers)
 * [`github::hooks`](#githubhooks)
@@ -698,6 +698,10 @@ Check if a gist is starred.
 
 Get the a gist's owner.
 
+### `gist::public`
+
+List all public gists.
+
 ### `gist::star`
 
 Star a gist.
@@ -737,10 +741,6 @@ List all Codes of Conduct.
 ### `github::emojis`
 
 List all the emojis available to use on GitHub.
-
-### `github::gists`
-
-List all public gists.
 
 ### `github::gitignores`
 
