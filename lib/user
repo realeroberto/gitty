@@ -81,10 +81,11 @@ function gitty::user::gists()
 {
     local user="${1:?User name required}"
     local since="${2:-$GITTY_API_EPOCH}"
-    local limit="${3:-100}" callback="${4:-cat}"
+    local selector="${3:-id}"
+    local limit="${4:-100}" callback="${5:-cat}"
     local url="/users/$user/gists?since=$since"
 
-    gitty::api::paginate "$url" id "$limit" "$callback"
+    gitty::api::paginate "$url" "$selector" "$limit" "$callback"
 }
 
 # Check if the specified user follows another.

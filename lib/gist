@@ -87,7 +87,34 @@ function gitty::gist::commits()
 # @public
 function gitty::gist::create()
 {
-    echo Unimplemented >&2
+    local description="${1:?Description required}"
+    local public="${2:-true}"
+    shift 2
+    local url="/gists"
+    local data
+
+    # inspired by https://stackoverflow.com/questions/38860529/create-json-using-jq-from-pipe-separated-keys-and-values-in-bash
+
+    local jq_args=( )
+    local jq_query='.'
+    local idx=0
+
+    while [[ $# -gt 0 ]]
+    do
+        local path="$1" ; shift
+        local filename="$(basename "$path")"
+        jq_args+=( --arg "key$idx"   "$filename"          )
+        jq_args+=( --arg "value$idx" "$(cat "$path")" )
+        jq_query+=" | .[\$key${idx}]={content: \$value${idx}}"
+        ((idx++))
+    done
+
+    jq_query="$jq_query | {description: \"${description}\", public: ${public}, files: (.)}"
+
+    # run the generated command
+    data="$(jq "${jq_args[@]}" "$jq_query" <<<'{}')"
+
+    gitty::api::post "$url" "$data"
 }
 
 # Delete a gist.
@@ -226,6 +253,20 @@ function gitty::gist::owner()
 
     gitty::gist::get "$id" \
         | gitty::api::filter .owner.login
+}
+
+# List all public gists.
+#
+# @cf   https://developer.github.com/v3/gists/#list-all-public-gists
+# @public
+function gitty::gist::public()
+{
+    local since="${1:-$GITTY_API_EPOCH}"
+    local selector="${2:-id}"
+    local limit="${3:-100}" callback="${4:-cat}"
+    local url="/gists/public?since=$since"
+    
+    gitty::api::paginate "$url" "$selector" "$limit" "$callback"
 }
 
 # Star a gist.

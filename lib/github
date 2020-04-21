@@ -64,19 +64,6 @@ function gitty::github::emojis()
     gitty::api::get "$url" keys[]
 }
 
-# List all public gists.
-#
-# @cf   https://developer.github.com/v3/gists/#list-all-public-gists
-# @public
-function gitty::github::gists()
-{
-    local since="${1:-$GITTY_API_EPOCH}"
-    limit="${2:-100}" callback="${3:-cat}"
-    local url="/gists/public?since=$since"
-    
-    gitty::api::paginate "$url" id "$limit" "$callback"
-}
-
 # List all .gitignore templates available to pass as an option when creating a
 # repository.
 #
