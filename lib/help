@@ -1,0 +1,105 @@
+#!/bin/bash
+
+################################################################################
+#  ____ ____ ____ ____ ____ 
+# ||G |||i |||t |||t |||y ||
+# ||__|||__|||__|||__|||__||
+# |/__\|/__\|/__\|/__\|/__\|
+#                                        
+# Gitty -- A GitHub client in Bash
+#
+# Copyright (c) 2014-20 Roberto Reale
+# 
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+# 
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+#
+################################################################################
+
+
+function gitty::help::method_desc()
+{
+    local module="${GITTY_LIB_BASE}/lib/$1" method="$2"
+    [[ -e $module && -n $method ]] || return
+
+    awk "
+        BEGIN {
+            STATE = \"none\"
+            bufferlen = 0
+        }
+
+        /^#[[:blank:]]*$/ {
+            STATE = \"comment\"
+            next
+        }
+
+        /^#/ {
+            if (STATE == \"none\") {
+                STATE = \"description\"
+                sub(/^#[[:blank:]]*/, \"\")
+                buffer[bufferlen++] = \$0
+            } else {
+                STATE = \"comment\"
+            }
+            next
+        }
+
+        /^function [A-Za-z0-9_:]+::$method()/ { 
+            STATE = \"signature\"
+            for (i in buffer)
+                print buffer[i]
+            STATE = \"none\"
+            next
+        }
+
+        {
+            delete buffer
+            bufferlen = 0
+            STATE = \"none\"
+            next
+        }
+
+        END {
+        }
+    " "$module"
+}
+
+function gitty::help::methods()
+{
+    local module="${GITTY_LIB_BASE}/lib/$1"
+    [[ -e $module ]] || return
+
+    grep -A 1 '^#\+ *@public' "$module"                               \
+        | sed -n 's/function \([A-Za-z0-9_:]\+\)::\([^:]\+\)()/\2/p'  \
+        | sort
+}
+
+function gitty::help::modules()
+{
+    for f in $(find $GITTY_LIB_BASE/lib/ \( -type f -a -not -name ".*" \) -exec grep -l "^#\!.*/bash" {} \;)
+    do
+        basename $f
+    done | sort
+}
+
+# Local variables:
+# mode: shell-script
+# sh-basic-offset: 4
+# sh-indent-comment: t
+# indent-tabs-mode: nil
+# End:
+# ex: ts=4 sw=4 et filetype=sh
