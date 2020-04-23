@@ -284,6 +284,10 @@ The active links represent implemented parts of the full API.
 
 * [`gitignore::content`](#gitignorecontent)
 
+### `help`
+
+
+
 ### `json`
 
 * [`json::build_array`](#jsonbuild_array)
