@@ -31,7 +31,7 @@
 #
 ################################################################################
 
-GITTY_LIB_BASE=.
+export GITTY_LIB_BASE=.
 
 for m in $(find $GITTY_LIB_BASE/lib/ \( -type f -a -not -name ".*" \) -exec grep -l "^#\!.*/bash" {} \;)
 do
