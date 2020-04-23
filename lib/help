@@ -31,6 +31,9 @@
 ################################################################################
 
 
+# Get the description of a method in Gitty.
+#
+# @public
 function gitty::help::method_desc()
 {
     local module="${GITTY_LIB_BASE}/lib/$1" method="$2"
@@ -78,6 +81,9 @@ function gitty::help::method_desc()
     " "$module"
 }
 
+# List all methods for a given module in Gitty.
+#
+# @public
 function gitty::help::methods()
 {
     local module="${GITTY_LIB_BASE}/lib/$1"
@@ -88,6 +94,9 @@ function gitty::help::methods()
         | sort
 }
 
+# List all modules in Gitty.
+#
+# @public
 function gitty::help::modules()
 {
     for f in $(find $GITTY_LIB_BASE/lib/ \( -type f -a -not -name ".*" \) -exec grep -l "^#\!.*/bash" {} \;)
