@@ -9,7 +9,7 @@ install:
 
 doc: README.inc.md mk-doc lib/*
 	cp -p README.inc.md README.md
-	$(SHELL) mk-doc lib >> README.md
+	./mk-doc >> README.md
 
 tests:
 	bats $$(find test -maxdepth 1 -type f -name '*.bats')
