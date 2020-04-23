@@ -286,7 +286,9 @@ The active links represent implemented parts of the full API.
 
 ### `help`
 
-
+* [`help::method_desc`](#helpmethod_desc)
+* [`help::methods`](#helpmethods)
+* [`help::modules`](#helpmodules)
 
 ### `json`
 
@@ -802,6 +804,18 @@ List all users, in the order that they signed up on GitHub.
 ### `gitignore::content`
 
 Fetch a .gitignore template by name.
+
+### `help::method_desc`
+
+Get the description of a method in Gitty.
+
+### `help::methods`
+
+List all methods for a given module in Gitty.
+
+### `help::modules`
+
+List all modules in Gitty.
 
 ### `json::build_array`
 
