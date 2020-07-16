@@ -33,13 +33,24 @@
 
 
 
+# Get the list of all emojis.
+#
+# @cf   https://docs.github.com/en/rest/reference/emojis#emojis
+# @public
+function gitty::emoji::list()
+{
+    local url="/emojis"
+    
+    gitty::api::get "$url"
+}
+
 # Get an emoji's url.
 #
 # @cf   https://docs.github.com/en/rest/reference/emojis#emojis
 # @public
 function gitty::emoji::url()
 {
-    local name="${1:?Emoji name required}"
+    local name="${1:-octocat}"
     local url="/emojis"
     
     # @cf https://github.com/stedolan/jq/issues/345
