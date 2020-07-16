@@ -35,7 +35,7 @@
 
 # Get an emoji's url.
 #
-# @cf   https://developer.github.com/v3/emojis/#emojis
+# @cf   https://docs.github.com/en/rest/reference/emojis#emojis
 # @public
 function gitty::emoji::url()
 {
