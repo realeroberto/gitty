@@ -168,7 +168,7 @@ function install_local()
 
     # cycle possible destinations to install the master script into
     IFS=: read -r -a destinations <<< "$GITTY_BIN_TARGETS"
-    for d in ${destinations[@]}
+    for d in "${destinations[@]}"
     do
         {
             # try and create the directory
