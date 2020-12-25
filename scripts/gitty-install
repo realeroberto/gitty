@@ -91,7 +91,7 @@ function verbose()
 
 function cleanup()
 {
-    [[ -n $current_branch ]] && git checkout -q $current_branch
+    [[ -n $current_branch ]] && git checkout -q "$current_branch"
 }
 
 trap cleanup EXIT
