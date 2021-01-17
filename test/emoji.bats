@@ -34,7 +34,7 @@ load 'lib/bats-support/load'
 load 'lib/bats-assert/load'
 
 source ./gittybox
-source gitty.sh
+source ./gitty.sh
 
 @test "gitty::emoji::url: get an emoji's URL" {
     result="$(gitty::emoji::url octocat)"
