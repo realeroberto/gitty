@@ -37,20 +37,24 @@ source gitty.sh
 
 [[ -n $GITTY_API_USERNAME ]] || fail "GITTY_API_USERNAME undefined"
 
-# @cf https://gist.github.com/earthgecko/3089509
-REPO_NAME="$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)"
+function __repo_name()
+{
+    # @cf https://gist.github.com/earthgecko/3089509
+    echo "$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)"
+}
 
 @test "gitty::repo::create: create a repository" {
+    local REPO_NAME="$(__repo_name)"
     gitty::repo::create "$REPO_NAME"
     assert_success
 }
 
 @test "gitty::repo::delete: delete a repository" {
-    gitty::repo::create "$REPO_NAME" > /dev/null
+    local REPO_NAME="$(__repo_name)"
 
-    gitty::repo::delete        \
-        "$GITTY_API_USERNAME"  \
-        "$REPO_NAME"
+    gitty::repo::create "$REPO_NAME" > /dev/null
+    gitty::repo::delete "$GITTY_API_USERNAME" "$REPO_NAME"
+    echo "$GITTY_API_USERNAME" "$REPO_NAME"
 
     assert_success
 }
