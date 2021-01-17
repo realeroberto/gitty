@@ -121,7 +121,7 @@ function gitty::api::request()
         fi
 
         # Echo headers/body/http_code
-        [[ $what != none ]] && eval echo "\"\$$what\""
+        [[ $what == none ]] || eval echo "\"\$$what\""
     }
 
     __gitty::api::request "$@"
