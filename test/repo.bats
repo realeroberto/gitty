@@ -33,6 +33,7 @@
 load 'lib/bats-support/load'
 load 'lib/bats-assert/load'
 
+source ./gittybox
 source gitty.sh
 
 [[ -n $GITTY_API_USERNAME ]] || fail "GITTY_API_USERNAME undefined"
