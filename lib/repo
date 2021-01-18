@@ -150,8 +150,8 @@ function gitty::repo::events()
 # @public
 function gitty::repo::fork()
 {
-    local user="${1:?User name needed}"
-    local repo="${2:?Repository name needed}"
+    local user="${1:-octocat}"
+    local repo="${2:-Spoon-Knife}"
     local org="$3"  # Optional parameter to specify the organization name if
                     # forking into an organization.
 
