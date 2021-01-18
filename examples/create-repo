@@ -8,15 +8,15 @@ source ./gittybox
 folder="$1"
 [[ -n $folder && -d $folder ]] || exit 1
 
-repo="$(gitty::repo::create "$folder")"
+repo="$(gitty::repo::create "$(basename "$folder")")"
 
 (
     cd "$folder"
     echo "# $repo" >> README.md
     git init
-    git add README.md
+    git add -A
     git commit -m "first commit"
     git branch -M main
-    git remote add origin https://github.com/gittybox/${repo}.git
+    git remote add origin "https://$GITTY_API_USERNAME:$GITTY_API_OAUTH_TOKEN@github.com/gittybox/${repo}.git"
     git push -u origin main
 )
