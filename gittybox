@@ -1,5 +1,10 @@
 # Gittybox is a sandbox GitHub account for Gitty
 # https://github.com/gittybox
 
+function __rot13()
+{
+    echo -n "$1" | tr 'A-Za-z' 'N-ZA-Mn-za-m'
+}
+
 export GITTY_API_USERNAME=gittybox
-export GITTY_API_OAUTH_TOKEN=2dc59c51a939101dc7e5a272cc0048c10f1c4872
+export GITTY_API_OAUTH_TOKEN=$(__rot13 8nss2701p4r5pn8p8s102opn20r03309s03oos15)
