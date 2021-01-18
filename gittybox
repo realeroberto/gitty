@@ -1,6 +1,7 @@
 # Gittybox is a sandbox GitHub account for Gitty
 # https://github.com/gittybox
 
+# This is necessary as GitHub immediately disables hard-coded tokens
 function __rot13()
 {
     echo -n "$1" | tr 'A-Za-z' 'N-ZA-Mn-za-m'
