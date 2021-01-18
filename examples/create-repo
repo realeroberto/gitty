@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Creates a repository from a local folder
+
+source ./gitty.sh
+source ./gittybox
+
+folder="$1"
+[[ -n $folder && -d $folder ]] || exit 1
+
+repo="$(gitty::repo::create "$folder")"
+
+(
+    cd "$folder"
+    echo "# $repo" >> README.md
+    git init
+    git add README.md
+    git commit -m "first commit"
+    git branch -M main
+    git remote add origin https://github.com/gittybox/${repo}.git
+    git push -u origin main
+)
