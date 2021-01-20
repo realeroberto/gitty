@@ -119,9 +119,9 @@ function gitty::gist::create()
 
 # Delete a gist.
 #
-# @cf   https://developer.github.com/v3/gists/#delete-a-gist
+# @cf   https://docs.github.com/en/rest/reference/gists#delete-a-gist
 # @public
-function gitty::gist::delete()
+function gitty::gists::delete()
 {
     local id="${1:?Gist id required}"
     local url="/gists/$id"
