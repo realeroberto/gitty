@@ -76,6 +76,7 @@ The active links represent implemented parts of the full API.
     - Timeline
 
 * [Licenses](https://docs.github.com/en/rest/reference/licenses)
+* [Meta](https://docs.github.com/en/rest/reference/meta)
 
 * Migration
     - Migrations

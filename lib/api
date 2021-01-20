@@ -132,7 +132,7 @@ function gitty::api::request()
 # @public
 function gitty::api::filter()
 {
-    if [[ -n $GITTY_API_FULL_JSON ]]
+    if [[ -n $GITTY_API_DO_NOT_PARSE_RESPONSE ]]
     then
         cat
     else

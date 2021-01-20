@@ -76,6 +76,7 @@ The active links represent implemented parts of the full API.
     - Timeline
 
 * [Licenses](https://docs.github.com/en/rest/reference/licenses)
+* [Meta](https://docs.github.com/en/rest/reference/meta)
 
 * Migration
     - Migrations
@@ -307,6 +308,13 @@ The active links represent implemented parts of the full API.
 * [`markdown::from_file`](#markdownfrom_file)
 * [`markdown::from_stream`](#markdownfrom_stream)
 * [`markdown::from_string`](#markdownfrom_string)
+
+### `meta`
+
+* [`meta::all`](#metaall)
+* [`meta::octocat`](#metaoctocat)
+* [`meta::root`](#metaroot)
+* [`meta::zen`](#metazen)
 
 ### `network`
 
@@ -840,6 +848,22 @@ Render an arbitrary Markdown document from stdin.
 
 Render an arbitrary Markdown document from a string (private method).
 Render an arbitrary Markdown document from a string.
+
+### `meta::all`
+
+Get GitHub meta information.
+
+### `meta::octocat`
+
+Get Octocat.
+
+### `meta::root`
+
+GitHub API Root.
+
+### `meta::zen`
+
+Get the Zen of GitHub
 
 ### `network::events`
 
