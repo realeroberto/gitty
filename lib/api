@@ -65,6 +65,7 @@ function gitty::api::request()
 
     function __gitty::api::request()
     {
+        local other_options
         local accept user_agent basic_auth oauth_token
         local response headers body http_code
         local error_message
@@ -89,11 +90,12 @@ function gitty::api::request()
         # Perform HTTP request
         response="$(
             eval curl -is                                                  \
+                "$other_options"                                           \
                 "$accept"                                                  \
                 "$user_agent"                                              \
                 "$basic_auth"                                              \
                 "$oauth_token"                                             \
-                "$GITTY_API_CUSTOM_HEADERS"                 \
+                "$GITTY_API_CUSTOM_HEADERS"                                \
                 --write-out '\\n%{http_code}\\n'                           \
                 "$@"
         )"
