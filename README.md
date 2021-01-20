@@ -51,6 +51,9 @@ The active links represent implemented parts of the full API.
     - Notifications
     - [Starring](https://developer.github.com/v3/activity/starring/)
     - Watching
+
+* [Emojis](https://docs.github.com/en/rest/reference/emojis)
+
 * [Gists](https://developer.github.com/v3/gists/)
     - [Comments](https://developer.github.com/v3/gists/comments/)
 * Git Data
@@ -76,7 +79,6 @@ The active links represent implemented parts of the full API.
     - Source Imports
 * [Miscellaneous](https://developer.github.com/v3/misc/)
     - [Codes of Conduct](https://developer.github.com/v3/codes_of_conduct/)
-    - [Emojis](https://developer.github.com/v3/emojis/)
     - [Gitignore](https://developer.github.com/v3/gitignore/)
     - [Licenses](https://developer.github.com/v3/licenses/)
     - [Markdown](https://developer.github.com/v3/markdown/)
@@ -219,9 +221,9 @@ The active links represent implemented parts of the full API.
 * [`emails::delete`](#emailsdelete)
 * [`emails::toggle_primary_visibility`](#emailstoggle_primary_visibility)
 
-### `emoji`
+### `emojis`
 
-* [`emoji::url`](#emojiurl)
+* [`emojis::list`](#emojislist)
 
 ### `events`
 
@@ -615,9 +617,9 @@ Delete email address(es).
 
 Toggle primary email visibility.
 
-### `emoji::url`
+### `emojis::list`
 
-Get an emoji's url.
+Lists all the emojis available to use on GitHub.
 
 ### `events::network`
 

@@ -33,28 +33,15 @@
 
 
 
-# Get the list of all emojis.
+# Lists all the emojis available to use on GitHub.
 #
-# @cf   https://docs.github.com/en/rest/reference/emojis#emojis
+# @cf   https://docs.github.com/en/rest/reference/emojis#get-emojis
 # @public
-function gitty::emoji::list()
+function gitty::emojis::list()
 {
     local url="/emojis"
     
     gitty::api::get "$url"
-}
-
-# Get an emoji's url.
-#
-# @cf   https://docs.github.com/en/rest/reference/emojis#emojis
-# @public
-function gitty::emoji::url()
-{
-    local name="${1:-octocat}"
-    local url="/emojis"
-    
-    # @cf https://github.com/stedolan/jq/issues/345
-    gitty::api::get "$url" ".[\"$name\"]"
 }
 
 
