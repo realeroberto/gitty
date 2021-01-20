@@ -74,13 +74,15 @@ The active links represent implemented parts of the full API.
     - Labels
     - Milestones
     - Timeline
+
+* [Licenses](https://docs.github.com/en/rest/reference/licenses)
+
 * Migration
     - Migrations
     - Source Imports
 * [Miscellaneous](https://developer.github.com/v3/misc/)
     - [Codes of Conduct](https://developer.github.com/v3/codes_of_conduct/)
     - [Gitignore](https://developer.github.com/v3/gitignore/)
-    - [Licenses](https://developer.github.com/v3/licenses/)
     - [Markdown](https://developer.github.com/v3/markdown/)
     - [Meta](https://developer.github.com/v3/meta/)
     - [Rate Limit](https://developer.github.com/v3/rate_limit/)

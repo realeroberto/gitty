@@ -193,20 +193,6 @@ function gitty::repo::is_starred()
     [[ $status == 204 ]]
 }
 
-# Get the contents of a repository's license.
-#
-# @cf   https://developer.github.com/v3/licenses/#get-the-contents-of-a-repositorys-license
-# @public
-function gitty::repo::license()
-{
-    local user="${1:?User name needed}"
-    local repo="${2:?Repository name needed}"
-    local url="/repos/$user/$repo/license"
-
-    download_url="$(gitty::api::get "$url" | jq -r .download_url?)"
-    [[ -n $download_url ]] && curl -s "$download_url"
-}
-
 # List repository projects.
 #
 # @cf   https://developer.github.com/v3/projects/#list-repository-projects

@@ -33,41 +33,42 @@
 
 
 
-# Get the name of an individual license.
+# Get all commonly used licenses.
 #
-# @cf   https://developer.github.com/v3/licenses/#get-an-individual-license
+# @cf   https://docs.github.com/en/rest/reference/licenses#get-all-commonly-used-licenses
 # @public
-function gitty::license::name()
+function gitty::licenses::all()
 {
-    local key="${1:-mit}"
-    local url="/licenses/$key"
+    local url="/licenses"
     
-    gitty::api::get "$url" .name
+    gitty::api::get "$url" .
 }
 
-# Describe an individual license.
+# Get a license.
 #
-# @cf   https://developer.github.com/v3/licenses/#get-an-individual-license
+# @cf   https://docs.github.com/en/rest/reference/licenses#get-a-license
 # @public
-function gitty::license::describe()
+function gitty::licenses::license()
 {
     local key="${1:-mit}"
     local url="/licenses/$key"
     
-    gitty::api::get "$url" .description
+    gitty::api::get "$url" .
 }
 
-# Get the text of an individual license.
+# Get the license for a repository.
 #
-# @cf   https://developer.github.com/v3/licenses/#get-an-individual-license
+# @cf   https://docs.github.com/en/rest/reference/licenses#get-the-license-for-a-repository
 # @public
-function gitty::license::text()
+function gitty::licenses::repo()
 {
-    local key="${1:-mit}"
-    local url="/licenses/$key"
-    
-    gitty::api::get "$url" .body
+    local user="${1:?User name needed}"
+    local repo="${2:?Repository name needed}"
+    local url="/repos/$user/$repo/license"
+
+    gitty::api::get "$url" .
 }
+
 
 # Local variables:
 # mode: shell-script

@@ -101,17 +101,6 @@ function gitty::github::importers()
     gitty::api::get "$url" .importers[]
 }
 
-# List all licenses.
-#
-# @cf   https://developer.github.com/v3/licenses/#list-all-licenses
-# @public
-function gitty::github::licenses()
-{
-    local url="/licenses"
-    
-    gitty::api::get "$url" .[].key
-}
-
 # List all organizations.
 #
 # @cf   https://developer.github.com/v3/orgs/#list-all-organizations

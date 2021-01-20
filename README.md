@@ -74,13 +74,15 @@ The active links represent implemented parts of the full API.
     - Labels
     - Milestones
     - Timeline
+
+* [Licenses](https://docs.github.com/en/rest/reference/licenses)
+
 * Migration
     - Migrations
     - Source Imports
 * [Miscellaneous](https://developer.github.com/v3/misc/)
     - [Codes of Conduct](https://developer.github.com/v3/codes_of_conduct/)
     - [Gitignore](https://developer.github.com/v3/gitignore/)
-    - [Licenses](https://developer.github.com/v3/licenses/)
     - [Markdown](https://developer.github.com/v3/markdown/)
     - [Meta](https://developer.github.com/v3/meta/)
     - [Rate Limit](https://developer.github.com/v3/rate_limit/)
@@ -271,7 +273,6 @@ The active links represent implemented parts of the full API.
 * [`github::git_servers`](#githubgit_servers)
 * [`github::hooks`](#githubhooks)
 * [`github::importers`](#githubimporters)
-* [`github::licenses`](#githublicenses)
 * [`github::orgs`](#githuborgs)
 * [`github::pages`](#githubpages)
 * [`github::password_auth`](#githubpassword_auth)
@@ -295,11 +296,11 @@ The active links represent implemented parts of the full API.
 
 * [`json::build_array`](#jsonbuild_array)
 
-### `license`
+### `licenses`
 
-* [`license::describe`](#licensedescribe)
-* [`license::name`](#licensename)
-* [`license::text`](#licensetext)
+* [`licenses::all`](#licensesall)
+* [`licenses::license`](#licenseslicense)
+* [`licenses::repo`](#licensesrepo)
 
 ### `markdown`
 
@@ -364,7 +365,6 @@ The active links represent implemented parts of the full API.
 * [`repo::fork`](#repofork)
 * [`repo::forks`](#repoforks)
 * [`repo::is_starred`](#repois_starred)
-* [`repo::license`](#repolicense)
 * [`repo::projects`](#repoprojects)
 * [`repo::readme`](#reporeadme)
 * [`repo::star`](#repostar)
@@ -761,10 +761,6 @@ Get a list of IP addresses in CIDR format specifying the addresses that
 
 Get a list of IP addresses in CIDR format specifying the addresses that
 
-### `github::licenses`
-
-List all licenses.
-
 ### `github::orgs`
 
 List all organizations.
@@ -818,17 +814,19 @@ List all modules in Gitty.
 
 Build a JSON array from argv.
 
-### `license::describe`
+### `licenses::all`
 
-Describe an individual license.
+Get all commonly used licenses.
 
-### `license::name`
+### `licenses::license`
 
-Get the name of an individual license.
+Get all commonly used licenses.
+Get a license.
+Get the license for a repository.
 
-### `license::text`
+### `licenses::repo`
 
-Get the text of an individual license.
+Get the license for a repository.
 
 ### `markdown::from_file`
 
@@ -1004,10 +1002,6 @@ List forks for a repository.
 ### `repo::is_starred`
 
 Check if a gist is starred.
-
-### `repo::license`
-
-Get the contents of a repository's license.
 
 ### `repo::projects`
 
