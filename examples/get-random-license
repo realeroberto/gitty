@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# Downloads a random license
+
+source ./gitty.sh
+source ./gittybox
+
+license="$(gitty::licenses::all | jq -r .[].key | shuf | head -1)"
+gitty::licenses::license $license | jq -r .body
