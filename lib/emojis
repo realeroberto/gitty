@@ -41,7 +41,7 @@ function gitty::emojis::list()
 {
     local url="/emojis"
     
-    gitty::api::get "$url"
+    gitty::api::get "$url" .
 }
 
 
