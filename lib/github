@@ -53,17 +53,6 @@ function gitty::github::conducts()
     )
 }
 
-# List all the emojis available to use on GitHub.
-#
-# @cf   https://developer.github.com/v3/emojis/#emojis
-# @public
-function gitty::github::emojis()
-{
-    local url="/emojis"
-    
-    gitty::api::get "$url" keys[]
-}
-
 # List all .gitignore templates available to pass as an option when creating a
 # repository.
 #

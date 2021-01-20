@@ -267,7 +267,6 @@ The active links represent implemented parts of the full API.
 ### `github`
 
 * [`github::conducts`](#githubconducts)
-* [`github::emojis`](#githubemojis)
 * [`github::gitignores`](#githubgitignores)
 * [`github::git_servers`](#githubgit_servers)
 * [`github::hooks`](#githubhooks)
@@ -745,10 +744,6 @@ Get the user of a single comment on a gist.
 ### `github::conducts`
 
 List all Codes of Conduct.
-
-### `github::emojis`
-
-List all the emojis available to use on GitHub.
 
 ### `github::gitignores`
 
