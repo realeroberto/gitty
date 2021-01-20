@@ -223,7 +223,7 @@ The active links represent implemented parts of the full API.
 
 ### `emojis`
 
-* [`emojis::list`](#emojislist)
+* [`emojis::all`](#emojisall)
 
 ### `events`
 
@@ -616,7 +616,7 @@ Delete email address(es).
 
 Toggle primary email visibility.
 
-### `emojis::list`
+### `emojis::all`
 
 Lists all the emojis available to use on GitHub.
 

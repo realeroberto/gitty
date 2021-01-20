@@ -37,7 +37,7 @@
 #
 # @cf   https://docs.github.com/en/rest/reference/emojis#get-emojis
 # @public
-function gitty::emojis::list()
+function gitty::emojis::all()
 {
     local url="/emojis"
     

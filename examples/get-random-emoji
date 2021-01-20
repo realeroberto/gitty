@@ -5,5 +5,5 @@
 source ./gitty.sh
 source ./gittybox
 
-url="$(gitty::emojis::list | jq -r 'keys_unsorted[] as $k | "\(.[$k])"' | shuf | head -1)"
+url="$(gitty::emojis::all | jq -r 'keys_unsorted[] as $k | "\(.[$k])"' | shuf | head -1)"
 curl -s --output "$(basename "$url")" "$url"
