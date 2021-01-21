@@ -31,15 +31,17 @@
 #
 ################################################################################
 
-GITTY_BASE=~/.gitty
-GITTY_CACHE_ROOT=$GITTY_BASE/__CACHE__
 
-GITTY_USER_AGENT="${GITTY_USER_AGENT:-gitty}"
 
-GITTY_API_ENDPOINT="${GITTY_API_ENDPOINT:-https://api.github.com}"
-GITTY_API_EPOCH="${GITTY_API_EPOCH:-$(date --iso-8601=seconds -d @0)}"
-GITTY_API_ERROR_HEADER="GitHub API error"
-GITTY_API_ERROR=1
+function gitty::cache::get()
+{
+    echo "$GITTY_CACHE_ROOT/$1"
+}
+
+function gitty::cache::set()
+{
+    echo "$1" > "$GITTY_CACHE_ROOT/$2"
+}
 
 
 # Local variables:

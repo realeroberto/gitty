@@ -56,6 +56,11 @@ function __gitty::api::extract_http_code()
     sed -n '$p' <<<"$1"
 }
 
+function __gitty::api::extract_etag()
+{
+    sed -n 's/^etag: .*"\([a-z0-9]*\)"\r/\1/p' <<<"$1"
+}
+
 # Make a generic HTTP request.
 #
 # @public
@@ -67,7 +72,7 @@ function gitty::api::request()
     {
         local other_options
         local accept user_agent basic_auth oauth_token
-        local response headers body http_code
+        local response headers body http_code etag
         local error_message
 
         # @cf https://developer.github.com/v3/media/#request-specific-version
@@ -109,6 +114,13 @@ function gitty::api::request()
           headers="$( __gitty::api::extract_headers   "$response")"
              body="$( __gitty::api::extract_body      "$response")"
         http_code="$( __gitty::api::extract_http_code "$response")"
+             etag="$( __gitty::api::extract_etag      "$headers" )"
+
+        # Cache response
+        if [[ -n $GITTY_API_CACHE ]]
+        then
+            gitty::cache::set "$body" "$etag"
+        fi
 
         # Check HTTP code
         if [[ $http_code == 000 ]]
