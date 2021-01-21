@@ -88,7 +88,6 @@ The active links represent implemented parts of the full API.
     - [Codes of Conduct](https://developer.github.com/v3/codes_of_conduct/)
     - [Markdown](https://developer.github.com/v3/markdown/)
     - [Meta](https://developer.github.com/v3/meta/)
-    - [Rate Limit](https://developer.github.com/v3/rate_limit/)
 * [Organizations](https://developer.github.com/v3/orgs/)
     - [Blocking Users](https://developer.github.com/v3/orgs/blocking/)
     - Members
@@ -102,6 +101,9 @@ The active links represent implemented parts of the full API.
     - Reviews
     - Review Comments
     - Review Requests
+
+* [Rate Limit](https://docs.github.com/en/rest/reference/rate-limit)
+
 * Reactions
     - Commit Comment
     - Issue
@@ -360,9 +362,7 @@ The active links represent implemented parts of the full API.
 
 ### `rate_limit`
 
-* [`rate_limit::limit`](#rate_limitlimit)
-* [`rate_limit::remaining`](#rate_limitremaining)
-* [`rate_limit::reset`](#rate_limitreset)
+* [`rate_limit::all`](#rate_limitall)
 
 ### `repo`
 
@@ -983,17 +983,9 @@ Get a project state.
 
 Get a project text.
 
-### `rate_limit::limit`
+### `rate_limit::all`
 
-Get the current rate limit status.
-
-### `rate_limit::remaining`
-
-Get the current rate limit status.
-
-### `rate_limit::reset`
-
-Get the current rate limit status.
+Get rate limit status for the authenticated user.
 
 ### `repo::by_id`
 

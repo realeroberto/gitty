@@ -33,40 +33,15 @@
 
 
 
-# Get the current rate limit status.
+# Get rate limit status for the authenticated user.
 #
-# @cf   https://developer.github.com/v3/rate_limit/#get-your-current-rate-limit-status
+# @cf   https://docs.github.com/en/rest/reference/rate-limit#get-rate-limit-status-for-the-authenticated-user
 # @public
-function gitty::rate_limit::limit()
+function gitty::rate_limit::all()
 {
-    local resource="${1:-core}"  # core/search
     local url="/rate_limit"
 
-    gitty::api::get "$url" .resources."$resource".limit
-}
-
-# Get the current rate limit status.
-#
-# @cf   https://developer.github.com/v3/rate_limit/#get-your-current-rate-limit-status
-# @public
-function gitty::rate_limit::remaining()
-{
-    local resource="${1:-core}"  # core/search
-    local url="/rate_limit"
-
-    gitty::api::get "$url" .resources."$resource".remaining
-}
-
-# Get the current rate limit status.
-#
-# @cf   https://developer.github.com/v3/rate_limit/#get-your-current-rate-limit-status
-# @public
-function gitty::rate_limit::reset()
-{
-    local resource="${1:-core}"  # core/search
-    local url="/rate_limit"
-
-    gitty::api::get "$url" .resources."$resource".reset
+    gitty::api::get "$url" .
 }
 
 

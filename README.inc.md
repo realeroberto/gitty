@@ -88,7 +88,6 @@ The active links represent implemented parts of the full API.
     - [Codes of Conduct](https://developer.github.com/v3/codes_of_conduct/)
     - [Markdown](https://developer.github.com/v3/markdown/)
     - [Meta](https://developer.github.com/v3/meta/)
-    - [Rate Limit](https://developer.github.com/v3/rate_limit/)
 * [Organizations](https://developer.github.com/v3/orgs/)
     - [Blocking Users](https://developer.github.com/v3/orgs/blocking/)
     - Members
@@ -102,6 +101,9 @@ The active links represent implemented parts of the full API.
     - Reviews
     - Review Comments
     - Review Requests
+
+* [Rate Limit](https://docs.github.com/en/rest/reference/rate-limit)
+
 * Reactions
     - Commit Comment
     - Issue
