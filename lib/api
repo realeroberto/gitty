@@ -119,7 +119,7 @@ function gitty::api::request()
         then
             error_message="$(jq -r .message <<<"$body")"
             $GITHUB_ERROR "$GITTY_API_ERROR_HEADER [$error_message]"
-            return $GITTY_API_ERROR
+            return "$GITTY_API_ERROR"
         fi
 
         # Echo headers/body/http_code
