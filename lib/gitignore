@@ -33,16 +33,27 @@
 
 
 
-# Fetch a .gitignore template by name.
+# Get all gitignore templates.
 #
-# @cf   https://developer.github.com/v3/gitignore/#get-a-single-template
+# @cf   https://docs.github.com/en/rest/reference/gitignore#get-all-gitignore-templates
 # @public
-function gitty::gitignore::content()
+function gitty::gitignore::all()
+{
+    local url="/gitignore/templates"
+    
+    gitty::api::get "$url" .
+}
+
+# Get a gitignore template.
+#
+# @cf   https://docs.github.com/en/rest/reference/gitignore#get-a-gitignore-template
+# @public
+function gitty::gitignore::by_name()
 {
     local name="${1:?Template name required}"
     local url="/gitignore/templates/$name"
     
-    gitty::api::get "$url" .source
+    gitty::api::get "$url" .
 }
 
 

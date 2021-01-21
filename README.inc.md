@@ -67,6 +67,9 @@ The active links represent implemented parts of the full API.
     - GitHub Marketplace
     - Permissions
     - Available Endpoints
+
+* [Gitignore](https://docs.github.com/en/rest/reference/gitignore)
+
 * Issues
     - Assignees
     - Comments
@@ -83,7 +86,6 @@ The active links represent implemented parts of the full API.
     - Source Imports
 * [Miscellaneous](https://developer.github.com/v3/misc/)
     - [Codes of Conduct](https://developer.github.com/v3/codes_of_conduct/)
-    - [Gitignore](https://developer.github.com/v3/gitignore/)
     - [Markdown](https://developer.github.com/v3/markdown/)
     - [Meta](https://developer.github.com/v3/meta/)
     - [Rate Limit](https://developer.github.com/v3/rate_limit/)

@@ -67,6 +67,9 @@ The active links represent implemented parts of the full API.
     - GitHub Marketplace
     - Permissions
     - Available Endpoints
+
+* [Gitignore](https://docs.github.com/en/rest/reference/gitignore)
+
 * Issues
     - Assignees
     - Comments
@@ -83,7 +86,6 @@ The active links represent implemented parts of the full API.
     - Source Imports
 * [Miscellaneous](https://developer.github.com/v3/misc/)
     - [Codes of Conduct](https://developer.github.com/v3/codes_of_conduct/)
-    - [Gitignore](https://developer.github.com/v3/gitignore/)
     - [Markdown](https://developer.github.com/v3/markdown/)
     - [Meta](https://developer.github.com/v3/meta/)
     - [Rate Limit](https://developer.github.com/v3/rate_limit/)
@@ -285,7 +287,8 @@ The active links represent implemented parts of the full API.
 
 ### `gitignore`
 
-* [`gitignore::content`](#gitignorecontent)
+* [`gitignore::all`](#gitignoreall)
+* [`gitignore::by_name`](#gitignoreby_name)
 
 ### `help`
 
@@ -411,6 +414,8 @@ The active links represent implemented parts of the full API.
 * [`user::timeline`](#usertimeline)
 * [`user::timeline_url`](#usertimeline_url)
 * [`user::unfollow`](#userunfollow)
+
+### `utils`
 
 ## Methods Description
 
@@ -802,9 +807,13 @@ Get the GitHub global public timeline URI.
 
 List all users, in the order that they signed up on GitHub.
 
-### `gitignore::content`
+### `gitignore::all`
 
-Fetch a .gitignore template by name.
+Get all gitignore templates.
+
+### `gitignore::by_name`
+
+Get a gitignore template.
 
 ### `help::method_desc`
 
