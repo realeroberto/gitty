@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# Lists all topics for a given user
+#
+# e.g. to create a nice wordcloud: examples/get-topics | wordcloud_cli --imagefile topics.jpg
+
+source ./gitty.sh
+source ./gittybox
+
+USER=${1:-reale}
+
+for repo in $(gitty::user::repos $USER)
+do
+    # TODO: pagination
+    gitty::repo::topics $USER $repo
+done | sort
