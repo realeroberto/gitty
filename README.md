@@ -1,5 +1,7 @@
 # Gitty
 
+![Uptime Robot](https://img.shields.io/uptimerobot/status/m788032647-687c8076338fa5d75e2470a7)
+
 A client for the [GitHub REST API v3](https://developer.github.com/v3/), written in Bash.
 
 
